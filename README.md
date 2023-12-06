@@ -9,3 +9,4 @@
 ## KẾ HOẠCH THỰC HIỆN 
 ### Tuần 1 ( 20/11/2023 Đến 26/11/2023 Push) : Tổ chức Project + Thiết kế CSDL
 ### Tuần 2 ( 27/11/2023 Đến 3/12/2023 Push) : Thiết kế Giao Diện Dự Án 
+### Tuần 3 ( 4/12/2023 Đến 10/12/2023 Push) : Thiết kế Giao Diện Dự Án ( tiếp theo)
