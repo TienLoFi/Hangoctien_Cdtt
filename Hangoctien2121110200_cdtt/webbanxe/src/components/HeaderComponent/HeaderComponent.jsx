@@ -19,7 +19,7 @@ const HeaderComponent = () => {
               placeholder="input search text"
              // onChange={onSearch}
               backgroundColorButton="#5a20c1"
-            />
+            />  
         </Col>
         <Col span={6} style={{display:"flex",gap:"25px"}}>
           <WrapperHeaderAcount >

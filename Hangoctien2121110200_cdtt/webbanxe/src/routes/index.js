@@ -21,6 +21,11 @@ export const routes=[
     isShowHeader: true,
 },
 {
+    path:'/:type',
+    page: ProductsPage,
+    isShowHeader: true,
+},
+{
     path:'*',
     page: NotFoundPage
  
