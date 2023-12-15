@@ -23,9 +23,10 @@ export const WrapperButtonMore = styled(ButtonComponent)`
     text-align: center;
     cursor: ${(props) => props.disabled ? 'not-allowed' : 'pointers'}
 `
-export const WrapperProducts = styled.div`
+export const WrapperProducts= styled.div`
     display: flex;
-    gap: 14px;
+    justify-content: center;
+    gap: 15px;
     margin-top:20px;
     flex-wrap: wrap;
 `

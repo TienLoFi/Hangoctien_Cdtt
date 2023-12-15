@@ -41,10 +41,10 @@ const CardComponent = () => {
         <span> | Đã bán 1000+</span>
       </WrapperReportText>
       <WrapperPriceText>
-        1.000.000đ{" "}
-        <span>
+        1.000.000đ
+        
           <WrapperDiscountText>-5%</WrapperDiscountText>
-        </span>
+        
       </WrapperPriceText>
     </WrapperCardStyle>
   );
