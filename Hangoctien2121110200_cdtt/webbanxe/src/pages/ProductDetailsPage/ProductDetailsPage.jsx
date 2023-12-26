@@ -1,13 +1,18 @@
 import React from 'react'
-import ProductDetailsComponent from '../../components/ProductDetailsComponent/ProductDetailsComponent'
+import { useNavigate, useParams } from 'react-router-dom'
+import ProductDetailComponent from '../../components/ProductDetailComponent/ProductDetailComponent'
 
-const ProductDetailPage = () => {
+const ProductDetailsPage = () => {
+  const {id} = useParams()
+  const navigate = useNavigate()
   return (
-    <div style={{ padding: '0 120px', background: '#efefef', height: '1000px' }}>
-      <h1>Trang Chủ</h1>
-      <ProductDetailsComponent/>
+    <div style={{width: '100%',background: '#efefef', height: '100%'}}>
+      <div style={{ width: '1270px', height: '100%', margin: '0 auto'}} >
+        <h5><span style={{cursor: 'pointer', fontWeight: 'bold',fontSize:16}} onClick={() => {navigate('/')}}>Trang chủ</span> - Chi tiết sản phẩm</h5>
+        <ProductDetailComponent idProduct={id} />
+      </div>
     </div>
   )
 }
 
-export default ProductDetailPage
+export default ProductDetailsPage
