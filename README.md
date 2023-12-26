@@ -10,3 +10,7 @@
 ### Tuần 1 ( 20/11/2023 Đến 26/11/2023 Push) : Tổ chức Project + Thiết kế CSDL
 ### Tuần 2 ( 27/11/2023 Đến 3/12/2023 Push) : Thiết kế Giao Diện Dự Án 
 ### Tuần 3 ( 4/12/2023 Đến 10/12/2023 Push) : Thiết kế Giao Diện Dự Án ( tiếp theo)
+### Tuần 4 ( 11/12/2023 Đến 17/12/2023 Push): Thiết kế BackEnd(part1)
+### Tuần 5 ( 18/12/2023 Đến 24/12/2023 Push): Thiết kế BackEnd(part2)
+### Tuần 6 ( 25/12/2023 Đến 31/12/2023 Push): Chỉnh Sửa Giao Diện Frontend (part1)
+
