@@ -1,6 +1,6 @@
 import { Col, Image, Rate, Row, Form } from "antd";
 import React from "react";
-import imageProductSmall from "../../assets/images/testsmall.webp";
+
 import {
   WrapperStyleImageSmall,
   WrapperStyleColImage,
@@ -44,6 +44,7 @@ const ProductDetailComponent = ({ idProduct }) => {
   const navigate = useNavigate();
   const location = useLocation();
   const dispatch = useDispatch();
+
 
   const onChange = (value) => {
     setNumProduct(Number(value));
@@ -204,6 +205,7 @@ const ProductDetailComponent = ({ idProduct }) => {
               name: productDetails?.name,
               amount: numProduct,
               image: productDetails?.image,
+              imageDetail: productDetails?.imageDetail,
               price: productDetails?.price,
               product: productDetails?._id,
               discount: productDetails?.discount,
@@ -216,7 +218,23 @@ const ProductDetailComponent = ({ idProduct }) => {
       }
     }
   };
+  const [mainImage, setMainImage] = useState(null);
+  const [thumbnailImages, setThumbnailImages] = useState([]);
+  const [selectedThumbnailIndex, setSelectedThumbnailIndex] = useState(0);
 
+  const handleThumbnailClick = (clickedImage, index) => {
+    setMainImage(clickedImage);
+    setSelectedThumbnailIndex(index);
+  };
+  
+  
+  useEffect(() => {
+    if (productDetails?.imageDetail?.length > 0) {
+      setMainImage(productDetails.image);
+      setThumbnailImages([productDetails.image, ...productDetails.imageDetail]);
+      setSelectedThumbnailIndex(0); // Reset the index to 0 when productDetails change
+    }
+  }, [productDetails]);
   return (
     <Loading isLoading={isLoading}>
       <Row
@@ -227,77 +245,42 @@ const ProductDetailComponent = ({ idProduct }) => {
           height: "100%",
         }}
       >
-        <Col
-          span={10}
-          style={{ borderRight: "1px solid #e5e5e5", paddingRight: "8px" }}
-        >
-          <div
-            style={{
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
-            }}
-          >
+        <Col span={10} style={{ borderRight: "1px solid #e5e5e5", paddingRight: "8px" }}>
+          <div style={{ display: "flex", alignItems: "center", justifyContent: "center" }}>
             <Image
-              src={productDetails?.image}
+              src={mainImage}
               alt="image product"
-              preview={false}
+              preview={true}
               style={{
-                width: "350px",
+                width: "300px",
                 height: "250px",
                 objectFit: "contain",
                 borderRadius: "8px",
               }}
             />
           </div>
-          <Row style={{ paddingTop: "10px", justifyContent: "space-between" }}>
-            <WrapperStyleColImage span={4} sty>
-              <WrapperStyleImageSmall
-                src={imageProductSmall}
-                alt="image small"
-                preview={false}
-              />
-            </WrapperStyleColImage>
-            <WrapperStyleColImage span={4}>
-              <WrapperStyleImageSmall
-                src={imageProductSmall}
-                alt="image small"
-                preview={false}
-              />
-            </WrapperStyleColImage>
-
-            <WrapperStyleColImage span={4}>
-              <WrapperStyleImageSmall
-                src={imageProductSmall}
-                alt="image small"
-                preview={false}
-              />
-            </WrapperStyleColImage>
-
-            <WrapperStyleColImage span={4}>
-              <WrapperStyleImageSmall
-                src={imageProductSmall}
-                alt="image small"
-                preview={false}
-              />
-            </WrapperStyleColImage>
-
-            <WrapperStyleColImage span={4}>
-              <WrapperStyleImageSmall
-                src={imageProductSmall}
-                alt="image small"
-                preview={false}
-              />
-            </WrapperStyleColImage>
-
-            <WrapperStyleColImage span={4}>
-              <WrapperStyleImageSmall
-                src={imageProductSmall}
-                alt="image small"
-                preview={false}
-              />
-            </WrapperStyleColImage>
+          <Row style={{ paddingTop: '10px', justifyContent: 'center' }}>
+            {thumbnailImages.map((image2, index) => (
+              <WrapperStyleColImage key={index} span={4}>
+                <WrapperStyleImageSmall
+                  src={image2}
+                  alt={`image small ${index}`}
+                  preview={false}
+                  onClick={() => handleThumbnailClick(image2, index)}
+                  style={{
+                    height: '73px',
+                    width: '73px',
+                    objectFit: 'contain',
+                    border: index === selectedThumbnailIndex ? '2px solid #00f' : 'none',
+                    opacity: index === selectedThumbnailIndex ? 1 : 0.5,
+                  }}
+                />
+              </WrapperStyleColImage>
+            ))}
           </Row>
+  
+{/* Đặt đoạn kiểm tra nội dung ở đây
+ {console.log('Image Details:', productDetails?.image)} */}
         </Col>
         <Col span={14} style={{ paddingLeft: "10px" }}>
           <WrapperStyleNameProduct>

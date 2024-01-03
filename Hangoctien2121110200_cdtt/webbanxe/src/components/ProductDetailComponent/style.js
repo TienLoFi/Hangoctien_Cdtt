@@ -2,13 +2,17 @@ import { Col, Image, InputNumber } from "antd";
 import styled from "styled-components";
 
 export const WrapperStyleImageSmall = styled(Image)`
-    height: 64px;
-    width: 64px;
+height: 34px ;
+width: 34px ;
+  object-fit: contain;
 `
 
 export const WrapperStyleColImage = styled(Col)`
     flex-basis: unset;
     display: flex;
+    justify-content: space-between;
+    margin-right: 15px;
+
 `
 
 export const WrapperStyleNameProduct = styled.h1`

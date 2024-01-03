@@ -45,7 +45,7 @@ export const TextContainer = styled.div`
 text-align:center;
 margin-top: 10px;
 font-weight: 600; 
-font-size: 16px;
+font-size: 20px;
 color: red; 
 `;
 export const ImageRow = styled.div`
@@ -60,11 +60,23 @@ export const ImageRow = styled.div`
 export const ImageContainer = styled.div`
 
   grid-col: 3; margin-top: 20px;
-
+  &:hover {
+    background-color: ${props => (props.disabled ? '#ccc' : '#ddd')};
+    transform: scale(1.05);
+    transition: background-color 0.3s ease, transform 0.3s ease;
+}
 `;
 export const SaleContainer = styled.div`
 grid-col: 2; 
 width: 100%;
   
   margin-left: 10px;
+`;
+export const Title= styled.div`
+font-weight: 600; 
+&:hover {
+  color: red;
+  span {
+      color: #fff;
+  }
 `;

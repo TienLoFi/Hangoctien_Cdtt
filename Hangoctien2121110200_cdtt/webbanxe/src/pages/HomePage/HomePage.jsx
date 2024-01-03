@@ -12,11 +12,11 @@ import {
   ImageContainer,
   TextContainer,
   SaleContainer,
+  Title,
 } from "./style";
 import slider1 from "../../assets/images/sliders/banner1.jpg";
 import slider2 from "../../assets/images/sliders/banner2.jpg";
 import slider3 from "../../assets/images/sliders/banner3.jpg";
-
 
 import bigsale from "../../assets/images/Post/bigsale.jpg";
 import blackfriday from "../../assets/images/Post/blackfriday.jpg";
@@ -36,7 +36,7 @@ const HomePage = () => {
   const searchProduct = useSelector((state) => state?.product?.search);
   const searchDebounce = useDebounce(searchProduct, 500);
   const [loading, setLoading] = useState(false);
-  const [limit, setLimit] = useState(6);
+  const [limit, setLimit] = useState(18);
   const [typeProducts, setTypeProducts] = useState([]);
 
   const fetchProductAll = async (context) => {
@@ -81,56 +81,58 @@ const HomePage = () => {
       <div
         className="body-container"
         style={{ width: "100%", backgroundColor: "#efefef" }}
-      >      <BodyContainer>
+      >
+        {" "}
+        <BodyContainer>
+          <SliderContainer>
+            <div
+              id="container"
+              style={{ height: "423px", width: "823px", paddingLeft: 70 }}
+            >
+              <SliderComponent arrImages={[slider1, slider2, slider3]} />
+            </div>
+          </SliderContainer>
 
-      <SliderContainer>
-        <div
-          id="container"
-          style={{ height: "423px", width: "823px", paddingLeft: 70 }}
-        >
-          <SliderComponent arrImages={[slider1, slider2, slider3]} />
-        </div>
-      </SliderContainer>
+          <SaleContainer>
+            <TextContainer className="text-container">
+              Chương Trình Khuyến Mãi
+            </TextContainer>
+            <ImageRow>
+              <ImageContainer>
+                <img
+                  src={bigsale}
+                  alt="Image 1"
+                  style={{ width: 160, height: 90, borderRadius: 10 }}
+                />
+              </ImageContainer>
+              <Title> BIG SALE 12.12 CÙNG EXPRESS CENTER</Title>
+            </ImageRow>
 
-    
-     <SaleContainer>
-     <TextContainer className="text-container">
-        Chương Trình Khuyến Mãi
-        </TextContainer>
-        <ImageRow>
-            <ImageContainer>
-              <img src={bigsale} alt="Image 1"
-              style={{   width:160,height:90,borderRadius:10}}
-            />
-            </ImageContainer>
-            BIG SALE 12.12 CÙNG EXPRESS CENTER
+            <ImageRow>
+              <ImageContainer>
+                <img
+                  src={blackfriday}
+                  alt="Image 1"
+                  style={{ width: 160, height: 90, borderRadius: 10 }}
+                />
+              </ImageContainer>
+              <Title>     Siêu Sale Black Friday: MUA CÀNG NHIỀU, GIẢM CÀNG CHILL</Title>
+         
+            </ImageRow>
 
-          </ImageRow>
-
-          <ImageRow>
-            <ImageContainer>
-            <img src={blackfriday} alt="Image 1"
-              style={{   width:160,height:90,borderRadius:10}}
-            />
-            </ImageContainer>
-            Siêu Sale Black Friday: MUA CÀNG NHIỀU, GIẢM CÀNG CHILL
-
-          </ImageRow>
-
-          <ImageRow>
-            <ImageContainer>
-            <img src={tangdichvu} alt="Image 1"
-              style={{   width:160,height:90,borderRadius:10}}
-            />
-            </ImageContainer>
-            Thay nhớt tặng quà – Ưu đãi đặc biệt chỉ có tại EXPRESS CENTER
-
-          </ImageRow>
-   
-     </SaleContainer>
-    
-    
-    </BodyContainer>
+            <ImageRow>
+              <ImageContainer>
+                <img
+                  src={tangdichvu}
+                  alt="Image 1"
+                  style={{ width: 160, height: 90, borderRadius: 10 }}
+                />
+              </ImageContainer>
+          <Title>  Thay nhớt tặng quà – Ưu đãi đặc biệt chỉ có tại EXPRESS CENTER</Title>
+            
+            </ImageRow>
+          </SaleContainer>
+        </BodyContainer>
         <div
           id="container"
           style={{ height: "1000px", width: "1270px", margin: "0 auto" }}
@@ -143,6 +145,7 @@ const HomePage = () => {
                 description,
                 image,
                 name,
+                imageDetail,
                 price,
                 rating,
                 type,
