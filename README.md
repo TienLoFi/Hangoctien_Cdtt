@@ -13,4 +13,5 @@
 ### Tuần 4 ( 11/12/2023 Đến 17/12/2023 Push): Thiết kế BackEnd(part1)
 ### Tuần 5 ( 18/12/2023 Đến 24/12/2023 Push): Thiết kế BackEnd(part2)
 ### Tuần 6 ( 25/12/2023 Đến 31/12/2023 Push): Chỉnh Sửa Giao Diện Frontend (part1)
+### Tuần 7 ( 1/1/20224 Đến 7/1/2024 Push): Thêm Một Số Chức Năng Cho Sản Phẩm
 
