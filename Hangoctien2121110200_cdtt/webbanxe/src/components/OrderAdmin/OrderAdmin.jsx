@@ -1,18 +1,21 @@
-import { Button,  Space } from 'antd'
+import { Button, Form, Space } from 'antd'
 import React from 'react'
-import { WrapperHeader } from './style'
+import { WrapperHeader, WrapperUploadFile } from './style'
 import TableComponent from '../TableComponent/TableComponent'
 import InputComponent from '../InputComponent/InputComponent'
+import DrawerComponent from '../DrawerComponent/DrawerComponent'
+import Loading from '../LoadingComponent/Loading'
+import ModalComponent from '../ModalComponent/ModalComponent'
+import { convertPrice, getBase64 } from '../../utils'
+import { useEffect } from 'react'
+import * as message from '../Message/Message'
 
-import { convertPrice} from '../../utils'
-
-
-import * as OrderService from '../../services/OrderSevice'
+import * as OrderService from '../../services/OrderService'
 import { useQuery } from '@tanstack/react-query'
-import {  SearchOutlined } from '@ant-design/icons'
+import { DeleteOutlined, EditOutlined, SearchOutlined } from '@ant-design/icons'
 import { useSelector } from 'react-redux'
 import { orderContant } from '../../contant'
-import PieChartComponent from './PieChart'
+// import PieChartComponent from './PieChart'
 
 const OrderAdmin = () => {
   const user = useSelector((state) => state?.user)
@@ -153,9 +156,9 @@ const OrderAdmin = () => {
   return (
     <div>
       <WrapperHeader>Quản lý đơn hàng</WrapperHeader>
-      <div style={{height: 200, width:200}}>
+      {/* <div style={{height: 200, width:200}}>
         <PieChartComponent data={orders?.data} />
-      </div>
+      </div> */}
       <div style={{ marginTop: '20px' }}>
         <TableComponent  columns={columns} isLoading={isLoadingOrders} data={dataTable} />
       </div>

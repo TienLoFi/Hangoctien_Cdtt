@@ -1,14 +1,18 @@
 import { Menu } from 'antd'
 import React, { useEffect, useState } from 'react'
 import { getItem } from '../../utils';
-import { UserOutlined, AppstoreOutlined, ShoppingCartOutlined } from '@ant-design/icons'
+import { UserOutlined, AppstoreOutlined, ShoppingCartOutlined ,MailOutlined,StarOutlined} from '@ant-design/icons'
 import HeaderComponent from '../../components/HeaderComponent/HeaderComponent';
 import AdminUser from '../../components/AdminUser/AdminUser';
 import AdminProduct from '../../components/AdminProduct/AdminProduct';
 import OrderAdmin from '../../components/OrderAdmin/OrderAdmin';
-// import * as OrderService from '../../services/OrderSevice'
+import AdminBrand from '../../components/AdminBrand/AdminBrand';
+import AdminPost from '../../components/AdminPost/AdminPost';
+import * as OrderService from '../../services/OrderService'
 import * as ProductService from '../../services/ProductService'
 import * as UserService from '../../services/UserService'
+import * as BrandService from '../../services/BrandService'
+
 
 import CustomizedContent from './components/CustomizedContent';
 import { useSelector } from 'react-redux';
@@ -21,16 +25,18 @@ const AdminPage = () => {
 
   const items = [
     getItem('Người dùng', 'users', <UserOutlined />),
-    getItem('Sản phẩm', 'products', <AppstoreOutlined />),
-    // getItem('Đơn hàng', 'orders', <ShoppingCartOutlined />),
+    getItem('Sản phẩm', 'products', <AppstoreOutlined />),    
+    getItem('Thương Hiệu', 'brands', <StarOutlined />),  
+    getItem('Đơn hàng', 'orders', <ShoppingCartOutlined />),
+    getItem('Bài Viết', 'posts', <MailOutlined  />),
     
   ];
 
   const [keySelected, setKeySelected] = useState('');
-  // const getAllOrder = async () => {
-  //   const res = await OrderService.getAllOrder(user?.access_token)
-  //   return {data: res?.data, key: 'orders'}
-  // }
+  const getAllOrder = async () => {
+    const res = await OrderService.getAllOrder(user?.access_token)
+    return {data: res?.data, key: 'orders'}
+  }
 
   const getAllProducts = async () => {
     const res = await ProductService.getAllProduct()
@@ -43,11 +49,17 @@ const AdminPage = () => {
     console.log('res', res)
     return {data: res?.data, key: 'users'}
   }
+  const getAllBrands = async () => {
+    const res = await BrandService.getAllBrand
+    console.log('res', res)
+    return {data: res?.data, key: 'brands'}
+  }
 
   const queries = useQueries({
     queries: [
       {queryKey: ['products'], queryFn: getAllProducts, staleTime: 1000 * 60},
       {queryKey: ['users'], queryFn: getAllUsers, staleTime: 1000 * 60},
+      {queryKey: ['brands'], queryFn: getAllBrands, staleTime: 1000 * 60},
       // {queryKey: ['orders'], queryFn: getAllOrder, staleTime: 1000 * 60},
     ]
   })
@@ -84,6 +96,14 @@ const AdminPage = () => {
         return (
           <OrderAdmin />
         )
+        case 'brands':
+          return (
+            <AdminBrand />
+          )
+          case 'post':
+            return (
+              <AdminPost />
+            )
       default:
         return <></>
     }

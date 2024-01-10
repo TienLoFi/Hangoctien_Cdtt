@@ -8,9 +8,9 @@ import { convertPrice } from '../../utils';
 import { useMemo } from 'react';
 import ModalComponent from '../../components/ModalComponent/ModalComponent';
 import InputComponent from '../../components/InputComponent/InputComponent';
-import { useMutationHooks } from '../../hooks/useMutationHook'; 
+import { useMutationHooks } from '../../hooks/useMutationHook';
 import * as  UserService from '../../services/UserService'
-import * as OrderService from '../../services/OrderSevice'
+import * as OrderService from '../../services/OrderService'
 import Loading from '../../components/LoadingComponent/Loading';
 import * as message from '../../components/Message/Message'
 import { updateUser } from '../../redux/slides/userSlide';

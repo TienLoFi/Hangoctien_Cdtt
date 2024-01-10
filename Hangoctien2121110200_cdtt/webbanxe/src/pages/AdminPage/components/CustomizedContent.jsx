@@ -25,6 +25,7 @@ const CustomizedContent = (props) => {
               {item === 'users' && <UserOutlined />}
               {item === 'products' && <AppstoreOutlined />}
               {item === 'orders' && <ShoppingCartOutlined />}
+              {item === 'brands' && <ShoppingCartOutlined />}
             </span>
             <span style={{color: '#fff',fontSize: 30, fontWeight: 'bold', textTransform: 'uppercase',}}>{item}</span>
             <span style={{color: '#fff',fontSize: 20, fontWeight: 'bold', textTransform: 'uppercase'}}>{data[item]}</span>

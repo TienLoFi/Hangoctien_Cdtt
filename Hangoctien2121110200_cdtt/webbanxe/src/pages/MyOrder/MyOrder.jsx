@@ -1,7 +1,7 @@
 import React,{ useEffect, useState } from 'react'
 import Loading from '../../components/LoadingComponent/Loading';
 import { useQuery } from '@tanstack/react-query';
-import * as OrderService from '../../services/OrderSevice'
+import * as OrderService from '../../services/OrderService'
 import { useSelector } from 'react-redux';
 import { convertPrice } from '../../utils';
 import { WrapperItemOrder, WrapperListOrder, WrapperHeaderItem, WrapperFooterItem, WrapperContainer, WrapperStatus } from './style';

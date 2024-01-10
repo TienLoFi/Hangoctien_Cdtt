@@ -11,17 +11,17 @@ import TableComponent from "../TableComponent/TableComponent";
 import { useState } from "react";
 import InputComponent from "../InputComponent/InputComponent";
 import { getBase64, renderOptions } from "../../utils";
-import * as ProductService from "../../services/ProductService";
+import * as BrandService from "../../services/BrandService";
 import { useMutationHooks } from "../../hooks/useMutationHook";
-import Loading from "../../components/LoadingComponent/Loading";
+import Loading from "../LoadingComponent/Loading";
 import { useEffect } from "react";
-import * as message from "../../components/Message/Message";
+import * as message from "../Message/Message";
 import { useQuery } from "@tanstack/react-query";
 import DrawerComponent from "../DrawerComponent/DrawerComponent";
 import { useSelector } from "react-redux";
 import ModalComponent from "../ModalComponent/ModalComponent";
 
-const AdminProduct = () => {
+const AdminBrand = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [rowSelected, setRowSelected] = useState("");
   const [isOpenDrawer, setIsOpenDrawer] = useState(false);
@@ -31,100 +31,67 @@ const AdminProduct = () => {
   const searchInput = useRef(null);
   const inittial = () => ({
     name: "",
-    price: "",
     description: "",
-    rating: "",
-    image: "",
-    imageDetail: [],
-    type: "",
-    countInStock: "",
-    newType: "",
-    discount: "",
+    logo: "",
+  
   });
-  const [stateProduct, setStateProduct] = useState(inittial());
-  const [stateProductDetails, setStateProductDetails] = useState(inittial());
+  const [stateBrand, setStateBrand] = useState(inittial());
+  const [stateBrandDetails, setStateBrandDetails] = useState(inittial());
 
   const [form] = Form.useForm();
 
   const mutation = useMutationHooks((data) => {
     const {
       name,
-      price,
+     
       description,
-      rating,
-      image,
-      imageDetail,
-      type,
-      countInStock,
-      discount,
+   
+      logo,
+    
     } = data;
-    const res = ProductService.createProduct({
-      name,
-      price,
-      description,
-      rating,
-      image,
-      imageDetail,
-      type,
-      countInStock,
-      discount,
+    const res = BrandService.createBrand({
+        name,
+     
+        description,
+     
+        logo,
+      
     });
     return res;
   });
-  const mutationUpdate = useMutationHooks(
-    (data) => {
-      const { id,
-        token,
-        ...rests } = data
-      const res = ProductService.updateProduct(
-        id,
-        token,
-        { ...rests })
-      return res
-    },
-  )
+  const mutationUpdate = useMutationHooks((data) => {
+    const { id, token, ...rests } = data;
+    const res = BrandService.updateBrand(id, token, { ...rests });
+    return res;
+  });
 
-  const mutationDeleted = useMutationHooks(
-    (data) => {
-      const { id,
-        token,
-      } = data
-      const res = ProductService.deleteProduct(
-        id,
-        token)
-      return res
-    },
-  )
+  const mutationDeleted = useMutationHooks((data) => {
+    const { id, token } = data;
+    const res = BrandService.deleteBrand(id, token);
+    return res;
+  });
 
-  const mutationDeletedMany = useMutationHooks(
-    (data) => {
-      const { token, ...ids
-      } = data
-      const res = ProductService.deleteManyProduct(
-        ids,
-        token)
-      return res
-    },
-  )
+  const mutationDeletedMany = useMutationHooks((data) => {
+    const { token, ...ids } = data;
+    const res = BrandService.deleteManyBrand(ids, token);
+    return res;
+  });
 
-  const getAllProducts = async () => {
-    const res = await ProductService.getAllProduct();
+  const getAllBrands = async () => {
+    const res = await BrandService.getAllBrand();
     return res;
   };
 
-  const fetchGetDetailsProduct = async (rowSelected) => {
-    const res = await ProductService.getDetailsProduct(rowSelected);
+  const fetchGetDetailsBrands = async (rowSelected) => {
+    const res = await BrandService.getDetailsBrand(rowSelected);
     if (res?.data) {
-      setStateProductDetails({
+      setStateBrandDetails({
         name: res?.data?.name,
-        price: res?.data?.price,
+        
         description: res?.data?.description,
-        rating: res?.data?.rating,
-        image: res?.data?.image,
-        imageDetail: res?.data?.imageDetail,
-        type: res?.data?.type,
-        countInStock: res?.data?.countInStock,
-        discount: res?.data?.discount,
+      
+        logo: res?.data?.logo,
+   
       });
     }
     setIsLoadingUpdate(false);
@@ -132,38 +99,35 @@ const AdminProduct = () => {
 
   useEffect(() => {
     if (!isModalOpen) {
-      form.setFieldsValue(stateProductDetails);
+      form.setFieldsValue(stateBrandDetails);
     } else {
       form.setFieldsValue(inittial());
     }
-  }, [form, stateProductDetails, isModalOpen]);
+  }, [form, stateBrandDetails, isModalOpen]);
 
   useEffect(() => {
     if (rowSelected && isOpenDrawer) {
       setIsLoadingUpdate(true);
-      fetchGetDetailsProduct(rowSelected);
+      fetchGetDetailsBrands(rowSelected);
     }
   }, [rowSelected, isOpenDrawer]);
 
-  const handleDetailsProduct = () => {
+  const handleDetailsBrands = () => {
     setIsOpenDrawer(true);
   };
 
-  const handleDelteManyProducts = (ids) => {
+  const handleDelteManyBrands = (ids) => {
     mutationDeletedMany.mutate(
       { ids: ids, token: user?.access_token },
       {
         onSettled: () => {
-          queryProduct.refetch();
+            queryBrand.refetch();
         },
       }
     );
   };
 
-  const fetchAllTypeProduct = async () => {
-    const res = await ProductService.getAllTypeProduct();
-    return res;
-  };
+
 
   const { data, isLoading, isSuccess, isError } = mutation;
   const {
@@ -185,15 +149,12 @@ const AdminProduct = () => {
     isError: isErrorDeletedMany,
   } = mutationDeletedMany;
 
-  const queryProduct = useQuery({
-    queryKey: ["products"],
-    queryFn: getAllProducts,
+  const queryBrand = useQuery({
+    queryKey: ["brands"],
+    queryFn: getAllBrands,
   });
-  const typeProduct = useQuery({
-    queryKey: ["type-product"],
-    queryFn: fetchAllTypeProduct,
-  });
-  const { isLoading: isLoadingProducts, data: products } = queryProduct;
+
+  const { isLoading: isLoadingBrands, data: brands } = queryBrand;
   const renderAction = () => {
     return (
       <div>
@@ -203,7 +164,7 @@ const AdminProduct = () => {
         />
         <EditOutlined
           style={{ color: "orange", fontSize: "30px", cursor: "pointer" }}
-          onClick={handleDetailsProduct}
+          onClick={handleDetailsBrands}
         />
       </div>
     );
@@ -300,63 +261,14 @@ const AdminProduct = () => {
   });
 
   const columns = [
-    {
-      title: "Image",
-      dataIndex: "image",
-      render: (text, record) => <img src={text} alt={record.name} style={{ maxWidth: "100px", maxHeight: "100px" }} />,
-    },
+
     {
       title: "Name",
       dataIndex: "name",
       sorter: (a, b) => a.name.length - b.name.length,
       ...getColumnSearchProps("name"),
     },
-    {
-      title: "Price",
-      dataIndex: "price",
-      sorter: (a, b) => a.price - b.price,
-      filters: [
-        {
-          text: ">= 50",
-          value: ">=",
-        },
-        {
-          text: "<= 50",
-          value: "<=",
-        },
-      ],
-      onFilter: (value, record) => {
-        if (value === ">=") {
-          return record.price >= 50;
-        }
-        return record.price <= 50;
-      },
-    },
-    {
-      title: "Rating",
-      dataIndex: "rating",
-      sorter: (a, b) => a.rating - b.rating,
-      filters: [
-        {
-          text: ">= 3",
-          value: ">=",
-        },
-        {
-          text: "<= 3",
-          value: "<=",
-        },
-      ],
-      onFilter: (value, record) => {
-        if (value === ">=") {
-          return Number(record.rating) >= 3;
-        }
-        return Number(record.rating) <= 3;
-      },
-    },
-    {
-      title: "Type",
-      dataIndex: "type",
-    },
+  
     {
       title: "Action",
       dataIndex: "action",
@@ -364,9 +276,9 @@ const AdminProduct = () => {
     },
   ];
   const dataTable =
-    products?.data?.length &&
-    products?.data?.map((product) => {
-      return { ...product, key: product._id };
+    brands?.data?.length &&
+    brands?.data?.map((brand) => {
+      return { ...brand, key: brand._id };
     });
 
   useEffect(() => {
@@ -397,15 +309,13 @@ const AdminProduct = () => {
 
   const handleCloseDrawer = () => {
     setIsOpenDrawer(false);
-    setStateProductDetails({
+    setStateBrandDetails({
       name: "",
-      price: "",
+   
       description: "",
-      rating: "",
-      image: "",
-      imageDetail: "",
-      type: "",
-      countInStock: "",
+    
+     logo: "",
+
     });
     form.resetFields();
   };
@@ -428,7 +338,7 @@ const AdminProduct = () => {
       { id: rowSelected, token: user?.access_token },
       {
         onSettled: () => {
-          queryProduct.refetch();
+          queryBrand.refetch();
         },
       }
     );
@@ -436,52 +346,43 @@ const AdminProduct = () => {
 
   const handleCancel = () => {
     setIsModalOpen(false);
-    setStateProduct({
+    setStateBrand({
       name: "",
-      price: "",
+     
       description: "",
-      rating: "",
-      image: "",
-      imageDetail:[],
-      type: "",
-      countInStock: "",
-      discount: "",
+  
+      logo: "",
+   
     });
     form.resetFields();
   };
 
   const onFinish = () => {
     const params = {
-      name: stateProduct.name,
-      price: stateProduct.price,
-      description: stateProduct.description,
-      rating: stateProduct.rating,
-      image: stateProduct.image,
-      imageDetail: stateProduct.imageDetail,
-      type:
-        stateProduct.type === "add_type"
-          ? stateProduct.newType
-          : stateProduct.type,
-      countInStock: stateProduct.countInStock,
-      discount: stateProduct.discount,
+      name: stateBrand.name,
+    
+      description: stateBrand.description,
+    
+      logo: stateBrand.logo,
+  
     };
     mutation.mutate(params, {
       onSettled: () => {
-        queryProduct.refetch();
+        queryBrand.refetch();
       },
     });
   };
 
   const handleOnchange = (e) => {
-    setStateProduct({
-      ...stateProduct,
+    setStateBrand({
+      ...stateBrand,
       [e.target.name]: e.target.value,
     });
   };
 
   const handleOnchangeDetails = (e) => {
-    setStateProductDetails({
-      ...stateProductDetails,
+    setStateBrandDetails({
+      ...stateBrandDetails,
       [e.target.name]: e.target.value,
     });
   };
@@ -492,25 +393,13 @@ const AdminProduct = () => {
       file.preview = await getBase64(file.originFileObj);
     }
 
-    setStateProduct({
-      ...stateProduct,
-      image: file.preview,
+    setStateBrand({
+      ...stateBrand,
+      logo: file.preview,
     });
   };
 
-const handleOnchangeAvatarsMultiple = async ({ fileList }) => {
-  const updatedDetails = await Promise.all(fileList.map(async (file) => {
-    if (!file.url && !file.preview) {
-      file.preview = await getBase64(file.originFileObj);
-    }
-    return file.preview;
-  }));
 
-  setStateProduct({
-    ...stateProduct,
-    imageDetail: [...new Set([...stateProduct.imageDetail, ...updatedDetails])],
-  });
-};
 
 
 
@@ -519,49 +408,37 @@ const handleOnchangeAvatarsMultiple = async ({ fileList }) => {
     if (!file.url && !file.preview) {
       file.preview = await getBase64(file.originFileObj);
     }
-    setStateProductDetails({
-      ...stateProductDetails,
-      image: file.preview,
+    setStateBrandDetails({
+      ...stateBrandDetails,
+      logo: file.preview,
     });
   };
 
-  const handleOnchangeAvatarDetailsMultiple = async ({ fileList }) => {
-    const updatedDetails = await Promise.all(fileList.map(async (file) => {
-      if (!file.url && !file.preview) {
-        file.preview = await getBase64(file.originFileObj);
-      }
-      return file.preview;
-    }));
-  
-    setStateProduct({
-      ...stateProduct,
-      imageDetail: [...new Set([...stateProduct.imageDetail, ...updatedDetails])],
-    });
-  };
+
   
   
 
   const onUpdateProduct = () => {
     mutationUpdate.mutate(
-      { id: rowSelected, token: user?.access_token, ...stateProductDetails },
+      { id: rowSelected, token: user?.access_token, ...stateBrandDetails },
       {
         onSettled: () => {
-          queryProduct.refetch();
+          queryBrand.refetch();
         },
       }
     );
   };
 
   const handleChangeSelect = (value) => {
-    setStateProduct({
-      ...stateProduct,
+    setStateBrand({
+      ...stateBrand,
       type: value,
     });
   };
 
   return (
     <div>
-      <WrapperHeader>Quản lý sản phẩm</WrapperHeader>
+      <WrapperHeader>Quản lý Thương Hiệu</WrapperHeader>
       <div style={{ marginTop: "10px" }}>
         <Button
           style={{
@@ -577,9 +454,9 @@ const handleOnchangeAvatarsMultiple = async ({ fileList }) => {
       </div>
       <div style={{ marginTop: "20px" }}>
         <TableComponent
-          handleDelteMany={handleDelteManyProducts}
+          handleDelteMany={handleDelteManyBrands}
           columns={columns}
-          isLoading={isLoadingProducts}
+          isLoading={isLoadingBrands}
           data={dataTable}
           onRow={(record, rowIndex) => {
             return {
@@ -592,7 +469,7 @@ const handleOnchangeAvatarsMultiple = async ({ fileList }) => {
       </div>
       <ModalComponent
         forceRender
-        title="Tạo sản phẩm"
+        title="Tạo Thương Hiệu"
         open={isModalOpen}
         onCancel={handleCancel}
         footer={null}
@@ -612,65 +489,13 @@ const handleOnchangeAvatarsMultiple = async ({ fileList }) => {
               rules={[{ required: true, message: "Please input your name!" }]}
             >
               <InputComponent
-                value={stateProduct["name"]}
+                value={stateBrand["name"]}
                 onChange={handleOnchange}
                 name="name"
               />
             </Form.Item>
 
-            <Form.Item
-              label="Type"
-              name="type"
-              rules={[{ required: true, message: "Please input your type!" }]}
-            >
-              <Select
-                name="type"
-                // defaultValue="lucy"
-                // style={{ width: 120 }}
-                value={stateProduct.type}
-                onChange={handleChangeSelect}
-                options={renderOptions(typeProduct?.data?.data)}
-              />
-            </Form.Item>
-            {stateProduct.type === "add_type" && (
-              <Form.Item
-                label="New type"
-                name="newType"
-                rules={[{ required: true, message: "Please input your type!" }]}
-              >
-                <InputComponent
-                  value={stateProduct.newType}
-                  onChange={handleOnchange}
-                  name="newType"
-                />
-              </Form.Item>
-            )}
-            <Form.Item
-              label="Count inStock"
-              name="countInStock"
-              rules={[
-                { required: true, message: "Please input your count inStock!" },
-              ]}
-            >
-              <InputComponent
-                value={stateProduct.countInStock}
-                onChange={handleOnchange}
-                name="countInStock"
-              />
-            </Form.Item>
-            <Form.Item
-              label="Price"
-              name="price"
-              rules={[
-                { required: true, message: "Please input your count price!" },
-              ]}
-            >
-              <InputComponent
-                value={stateProduct.price}
-                onChange={handleOnchange}
-                name="price"
-              />
-            </Form.Item>
+         
             <Form.Item
               label="Description"
               name="description"
@@ -682,40 +507,12 @@ const handleOnchangeAvatarsMultiple = async ({ fileList }) => {
               ]}
             >
               <InputComponent
-                value={stateProduct.description}
+                value={stateBrand.description}
                 onChange={handleOnchange}
                 name="description"
               />
             </Form.Item>
-            <Form.Item
-              label="Rating"
-              name="rating"
-              rules={[
-                { required: true, message: "Please input your count rating!" },
-              ]}
-            >
-              <InputComponent
-                value={stateProduct.rating}
-                onChange={handleOnchange}
-                name="rating"
-              />
-            </Form.Item>
-            <Form.Item
-              label="Discount"
-              name="discount"
-              rules={[
-                {
-                  required: true,
-                  message: "Please input your discount of product!",
-                },
-              ]}
-            >
-              <InputComponent
-                value={stateProduct.discount}
-                onChange={handleOnchange}
-                name="discount"
-              />
-            </Form.Item>
+         
             <Form.Item
               label="Image"
               name="image"
@@ -725,9 +522,9 @@ const handleOnchangeAvatarsMultiple = async ({ fileList }) => {
             >
               <WrapperUploadFile onChange={handleOnchangeAvatar} maxCount={1}>
                 <Button>Select File</Button>
-                {stateProduct?.image && (
+                {stateBrand?.logo && (
                   <img
-                    src={stateProduct?.image}
+                    src={stateBrand?.logo}
                     style={{
                       height: "60px",
                       width: "60px",
@@ -741,33 +538,7 @@ const handleOnchangeAvatarsMultiple = async ({ fileList }) => {
               </WrapperUploadFile>
             </Form.Item>
 
-            <Form.Item
-              label="Image"
-              name="image"
-              rules={[
-                { required: true, message: "Please input your count image!" },
-              ]}
-            >
-              <WrapperUploadFile
-                onChange={handleOnchangeAvatarsMultiple}
-                maxCount={6}
-              >
-              <Button>Select File</Button>
-                {stateProduct?.imageDetail && (
-                  <img
-                    src={stateProduct?.imageDetail}
-                    style={{
-                      height: "60px",
-                      width: "60px",
-                      borderRadius: "50%",
-                      objectFit: "cover",
-                      marginLeft: "10px",
-                    }}
-                    alt="avatar"
-                  />
-                )}
-              </WrapperUploadFile>
-            </Form.Item>
+          
 
             <Form.Item wrapperCol={{ offset: 20, span: 16 }}>
               <Button type="primary" htmlType="submit">
@@ -798,50 +569,13 @@ const handleOnchangeAvatarsMultiple = async ({ fileList }) => {
               rules={[{ required: true, message: "Please input your name!" }]}
             >
               <InputComponent
-                value={stateProductDetails["name"]}
+                value={stateBrandDetails["name"]}
                 onChange={handleOnchangeDetails}
                 name="name"
               />
             </Form.Item>
 
-            <Form.Item
-              label="Type"
-              name="type"
-              rules={[{ required: true, message: "Please input your type!" }]}
-            >
-              <InputComponent
-                value={stateProductDetails["type"]}
-                onChange={handleOnchangeDetails}
-                name="type"
-              />
-            </Form.Item>
-            <Form.Item
-              label="Count inStock"
-              name="countInStock"
-              rules={[
-                { required: true, message: "Please input your count inStock!" },
-              ]}
-            >
-              <InputComponent
-                value={stateProductDetails.countInStock}
-                onChange={handleOnchangeDetails}
-                name="countInStock"
-              />
-            </Form.Item>
-            <Form.Item
-              label="Price"
-              name="price"
-              rules={[
-                { required: true, message: "Please input your count price!" },
-              ]}
-            >
-              <InputComponent
-                value={stateProductDetails.price}
-                onChange={handleOnchangeDetails}
-                name="price"
-              />
-            </Form.Item>
-            <Form.Item
+                   <Form.Item
               label="Description"
               name="description"
               rules={[
@@ -852,40 +586,12 @@ const handleOnchangeAvatarsMultiple = async ({ fileList }) => {
               ]}
             >
               <InputComponent
-                value={stateProductDetails.description}
+                value={stateBrandDetails.description}
                 onChange={handleOnchangeDetails}
                 name="description"
               />
             </Form.Item>
-            <Form.Item
-              label="Rating"
-              name="rating"
-              rules={[
-                { required: true, message: "Please input your count rating!" },
-              ]}
-            >
-              <InputComponent
-                value={stateProductDetails.rating}
-                onChange={handleOnchangeDetails}
-                name="rating"
-              />
-            </Form.Item>
-            <Form.Item
-              label="Discount"
-              name="discount"
-              rules={[
-                {
-                  required: true,
-                  message: "Please input your discount of product!",
-                },
-              ]}
-            >
-              <InputComponent
-                value={stateProductDetails.discount}
-                onChange={handleOnchangeDetails}
-                name="discount"
-              />
-            </Form.Item>
+           
             <Form.Item
               label="Image"
               name="image"
@@ -898,9 +604,9 @@ const handleOnchangeAvatarsMultiple = async ({ fileList }) => {
                 maxCount={1}
               >
                 <Button>Select File</Button>
-                {stateProductDetails?.image && (
+                {stateBrandDetails?.logo && (
                   <img
-                    src={stateProductDetails?.image}
+                    src={stateBrandDetails?.logo}
                     style={{
                       height: "60px",
                       width: "60px",
@@ -914,33 +620,7 @@ const handleOnchangeAvatarsMultiple = async ({ fileList }) => {
               </WrapperUploadFile>
             </Form.Item>
 
-          <Form.Item
-              label="Image"
-              name="image"
-              rules={[
-                { required: true, message: "Please input your count image!" },
-              ]}
-            >
-              <WrapperUploadFile
-                onChange={handleOnchangeAvatarDetailsMultiple}
-                maxCount={6}
-              >
-                <Button>Select File</Button>
-                {stateProductDetails?.imageDetail && (
-                  <img
-                    src={stateProductDetails?.imageDetail}
-                    style={{
-                      height: "60px",
-                      width: "60px",
-                      borderRadius: "50%",
-                      objectFit: "cover",
-                      marginLeft: "10px",
-                    }}
-                    alt="avatar"
-                  />
-                )}
-              </WrapperUploadFile>
-            </Form.Item> 
+     
 
             <Form.Item wrapperCol={{ offset: 20, span: 16 }}>
               <Button type="primary" htmlType="submit">
@@ -964,4 +644,4 @@ const handleOnchangeAvatarsMultiple = async ({ fileList }) => {
   );
 };
 
-export default AdminProduct;
+export default AdminBrand;

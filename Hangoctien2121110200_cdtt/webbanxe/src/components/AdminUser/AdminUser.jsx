@@ -210,6 +210,11 @@ const AdminUser = () => {
 
   const columns = [
     {
+      title: "Image",
+      dataIndex: "image",
+      render: (avatar, record) => <img src={user.avatar} alt={user.name} style={{ maxWidth: "100px", maxHeight: "100px" }} />,
+    },
+    {
       title: 'Name',
       dataIndex: 'name',
       sorter: (a, b) => a.name.length - b.name.length,
