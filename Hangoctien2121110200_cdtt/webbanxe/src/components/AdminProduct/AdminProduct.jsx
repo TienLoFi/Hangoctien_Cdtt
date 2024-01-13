@@ -10,8 +10,9 @@ import { WrapperHeader, WrapperUploadFile} from "./style";
 import TableComponent from "../TableComponent/TableComponent";
 import { useState } from "react";
 import InputComponent from "../InputComponent/InputComponent";
-import { getBase64, renderOptions } from "../../utils";
+import { getBase64, renderOptions,renderOptions2 } from "../../utils";
 import * as ProductService from "../../services/ProductService";
+import * as BrandService from "../../services/BrandService";
 import { useMutationHooks } from "../../hooks/useMutationHook";
 import Loading from "../../components/LoadingComponent/Loading";
 import { useEffect } from "react";
@@ -37,15 +38,25 @@ const AdminProduct = () => {
     image: "",
     imageDetail: [],
     type: "",
+    brand: "",
     countInStock: "",
     newType: "",
     discount: "",
   });
   const [stateProduct, setStateProduct] = useState(inittial());
   const [stateProductDetails, setStateProductDetails] = useState(inittial());
+  const [stateBrand, setStateBrand] = useState(inittial());
 
   const [form] = Form.useForm();
-
+  const renderOptions2 = (data) => {
+    if (!data) return [];
+  
+    return data.map((brand) => ({
+      value: brand._id,
+      label: brand.name,
+    }));
+  };
+  
   const mutation = useMutationHooks((data) => {
     const {
       name,
@@ -123,6 +134,7 @@ const AdminProduct = () => {
         image: res?.data?.image,
         imageDetail: res?.data?.imageDetail,
         type: res?.data?.type,
+        brand: res?.data?.brand,
         countInStock: res?.data?.countInStock,
         discount: res?.data?.discount,
       });
@@ -164,7 +176,10 @@ const AdminProduct = () => {
     const res = await ProductService.getAllTypeProduct();
     return res;
   };
-
+  const fetchAllBrand = async () => {
+    const res = await BrandService.getAllBrand();
+    return res;
+  };
   const { data, isLoading, isSuccess, isError } = mutation;
   const {
     data: dataUpdated,
@@ -192,6 +207,10 @@ const AdminProduct = () => {
   const typeProduct = useQuery({
     queryKey: ["type-product"],
     queryFn: fetchAllTypeProduct,
+  });
+  const BrandProduct= useQuery({
+    queryKey: ["brands"],
+    queryFn: fetchAllBrand,
   });
   const { isLoading: isLoadingProducts, data: products } = queryProduct;
   const renderAction = () => {
@@ -405,6 +424,7 @@ const AdminProduct = () => {
       image: "",
       imageDetail: "",
       type: "",
+      brand: "",
       countInStock: "",
     });
     form.resetFields();
@@ -444,6 +464,7 @@ const AdminProduct = () => {
       image: "",
       imageDetail:[],
       type: "",
+      brand: "",
       countInStock: "",
       discount: "",
     });
@@ -458,6 +479,7 @@ const AdminProduct = () => {
       rating: stateProduct.rating,
       image: stateProduct.image,
       imageDetail: stateProduct.imageDetail,
+      brand: stateProduct.brand,
       type:
         stateProduct.type === "add_type"
           ? stateProduct.newType
@@ -559,6 +581,14 @@ const handleOnchangeAvatarsMultiple = async ({ fileList }) => {
     });
   };
 
+    //brand
+    const handleChangeSelect1 = (value) => {
+      setStateBrand({
+        ...stateBrand,
+        brand: value,
+      });
+  };
+
   return (
     <div>
       <WrapperHeader>Quản lý sản phẩm</WrapperHeader>
@@ -617,7 +647,20 @@ const handleOnchangeAvatarsMultiple = async ({ fileList }) => {
                 name="name"
               />
             </Form.Item>
-
+            <Form.Item
+              label="Name"
+              name="name"
+              rules={[{ required: true, message: "Please input your brand!" }]}
+            >
+               <Select
+                name="name"
+                // defaultValue="lucy"
+                // style={{ width: 120 }}
+                value={stateBrand.name}
+                onChange={handleChangeSelect1}
+                options={renderOptions2(BrandProduct?.data?.data)}
+              />
+            </Form.Item>
             <Form.Item
               label="Type"
               name="type"

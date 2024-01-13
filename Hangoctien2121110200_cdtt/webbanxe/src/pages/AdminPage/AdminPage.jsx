@@ -7,11 +7,13 @@ import AdminUser from '../../components/AdminUser/AdminUser';
 import AdminProduct from '../../components/AdminProduct/AdminProduct';
 import OrderAdmin from '../../components/OrderAdmin/OrderAdmin';
 import AdminBrand from '../../components/AdminBrand/AdminBrand';
+import AdminBanner from '../../components/AdminBanner/AdminBanner';
 import AdminPost from '../../components/AdminPost/AdminPost';
 import * as OrderService from '../../services/OrderService'
 import * as ProductService from '../../services/ProductService'
 import * as UserService from '../../services/UserService'
 import * as BrandService from '../../services/BrandService'
+import * as BannerService from '../../services/BannerService'
 
 
 import CustomizedContent from './components/CustomizedContent';
@@ -24,11 +26,12 @@ const AdminPage = () => {
   const user = useSelector((state) => state?.user)
 
   const items = [
-    getItem('Người dùng', 'users', <UserOutlined />),
-    getItem('Sản phẩm', 'products', <AppstoreOutlined />),    
-    getItem('Thương Hiệu', 'brands', <StarOutlined />),  
-    getItem('Đơn hàng', 'orders', <ShoppingCartOutlined />),
-    getItem('Bài Viết', 'posts', <MailOutlined  />),
+    getItem('Quản Lí Người dùng', 'users', <UserOutlined />),
+    getItem('Quản Lí Sản phẩm', 'products', <AppstoreOutlined />),    
+    getItem('Quản Lí Thương Hiệu', 'brands', <StarOutlined />),  
+    getItem('Quản Lí Đơn hàng', 'orders', <ShoppingCartOutlined />),
+    getItem('Quản Lí Bài Viết', 'posts', <MailOutlined  />),
+    getItem('Quản Lí Banner', 'banners', <MailOutlined  />),
     
   ];
 
@@ -54,12 +57,17 @@ const AdminPage = () => {
     console.log('res', res)
     return {data: res?.data, key: 'brands'}
   }
-
+  const getAllBanners = async () => {
+    const res = await BannerService.getAllBanner
+    console.log('res', res)
+    return {data: res?.data, key: 'brands'}
+  }
   const queries = useQueries({
     queries: [
       {queryKey: ['products'], queryFn: getAllProducts, staleTime: 1000 * 60},
       {queryKey: ['users'], queryFn: getAllUsers, staleTime: 1000 * 60},
       {queryKey: ['brands'], queryFn: getAllBrands, staleTime: 1000 * 60},
+      {queryKey: ['banners'], queryFn: getAllBanners, staleTime: 1000 * 60},
       // {queryKey: ['orders'], queryFn: getAllOrder, staleTime: 1000 * 60},
     ]
   })
@@ -104,6 +112,10 @@ const AdminPage = () => {
             return (
               <AdminPost />
             )
+            case 'banners':
+              return (
+                <AdminBanner/>
+              )
       default:
         return <></>
     }

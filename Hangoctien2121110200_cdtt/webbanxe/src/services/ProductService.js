@@ -11,7 +11,6 @@ export const getAllProduct = async (search, limit) => {
     return res.data
 }
 
-
 export const getProductType = async (type, page, limit) => {
     if (type) {
         const res = await axios.get(`${process.env.REACT_APP_API_URL}/product/get-all?filter=type&filter=${type}&limit=${limit}&page=${page}`)
@@ -51,7 +50,7 @@ export const deleteManyProduct = async (data, access_token,) => {
     const res = await axiosJWT.post(`${process.env.REACT_APP_API_URL}/product/delete-many`, data, {
         headers: {
             token: `Bearer ${access_token}`,
-        }   
+        }
     })
     return res.data
 }
