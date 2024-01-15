@@ -1,34 +1,30 @@
-const Product = require("../models/ProductModel")
+const Category = require("../models/CategoryModel")
 
-const createProduct = (newProduct) => {
+const createCategory = (newCategory) => {
     return new Promise(async (resolve, reject) => {
-        const { name, image, imageDetail,type, countInStock, price, rating, description,discount } = newProduct
+        const { name, image,   description } = newCategory
         try {
-            const checkProduct = await Product.findOne({
+            const checkCategory = await Category.findOne({
                 name: name
             })
-            if (checkProduct !== null) {
+            if (checkCategory !== null) {
                 resolve({
                     status: 'ERR',
-                    message: 'The name of product is already'
+                    message: 'The name of category is already'
                 })
             }
-            const newProduct = await Product.create({
+            const newCategory = await Category.create({
                 name, 
                 image, 
-                imageDetail,
-                type, 
-                countInStock: Number(countInStock), 
-                price, 
-                rating, 
+         
+                
                 description,
-                discount: Number(discount),
             })
-            if (newProduct) {
+            if (newCategory) {
                 resolve({
                     status: 'OK',
                     message: 'SUCCESS',
-                    data: newProduct
+                    data: newCategory
                 })
             }
         } catch (e) {
@@ -37,24 +33,24 @@ const createProduct = (newProduct) => {
     })
 }
 
-const updateProduct = (id, data) => {
+const updateCategory = (id, data) => {
     return new Promise(async (resolve, reject) => {
         try {
-            const checkProduct = await Product.findOne({
+            const checkCategory = await Category.findOne({
                 _id: id
             })
-            if (checkProduct === null) {
+            if (checkCategory === null) {
                 resolve({
                     status: 'ERR',
-                    message: 'The product is not defined'
+                    message: 'The category is not defined'
                 })
             }
 
-            const updatedProduct = await Product.findByIdAndUpdate(id, data, { new: true })
+            const updatedCategory = await Category.findByIdAndUpdate(id, data, { new: true })
             resolve({
                 status: 'OK',
                 message: 'SUCCESS',
-                data: updatedProduct
+                data: updatedCategory
             })
         } catch (e) {
             reject(e)
@@ -62,23 +58,23 @@ const updateProduct = (id, data) => {
     })
 }
 
-const deleteProduct = (id) => {
+const deleteCategory = (id) => {
     return new Promise(async (resolve, reject) => {
         try {
-            const checkProduct = await Product.findOne({
+            const checkCategory = await Category.findOne({
                 _id: id
             })
-            if (checkProduct === null) {
+            if (checkCategory === null) {
                 resolve({
                     status: 'ERR',
-                    message: 'The product is not defined'
+                    message: 'The category is not defined'
                 })
             }
 
-            await Product.findByIdAndDelete(id)
+            await Category.findByIdAndDelete(id)
             resolve({
                 status: 'OK',
-                message: 'Delete product success',
+                message: 'Delete category success',
             })
         } catch (e) {
             reject(e)
@@ -86,13 +82,13 @@ const deleteProduct = (id) => {
     })
 }
 
-const deleteManyProduct = (ids) => {
+const deleteManyCategory = (ids) => {
     return new Promise(async (resolve, reject) => {
         try {
-            await Product.deleteMany({ _id: ids })
+            await Category.deleteMany({ _id: ids })
             resolve({
                 status: 'OK',
-                message: 'Delete product success',
+                message: 'Delete category success',
             })
         } catch (e) {
             reject(e)
@@ -100,23 +96,23 @@ const deleteManyProduct = (ids) => {
     })
 }
 
-const getDetailsProduct = (id) => {
+const getDetailsCategory = (id) => {
     return new Promise(async (resolve, reject) => {
         try {
-            const product = await Product.findOne({
+            const category = await Category.findOne({
                 _id: id
             })
-            if (product === null) {
+            if (category === null) {
                 resolve({
                     status: 'ERR',
-                    message: 'The product is not defined'
+                    message: 'The category is not defined'
                 })
             }
 
             resolve({
                 status: 'OK',
                 message: 'SUCESS',
-                data: product
+                data: category
             })
         } catch (e) {
             reject(e)
@@ -124,14 +120,14 @@ const getDetailsProduct = (id) => {
     })
 }
 
-const getAllProduct = (limit, page, sort, filter) => {
+const getAllCategory = (limit, page, sort, filter) => {
     return new Promise(async (resolve, reject) => {
         try {
-            const totalProduct = await Product.countDocuments();
+            const totalCategory = await Category.countDocuments();
 
             if (filter) {
                 const label = filter[0];
-                const allObjectFilter = await Product.find({ [label]: { '$regex': filter[1] } })
+                const allObjectFilter = await Category.find({ [label]: { '$regex': filter[1] } })
                     .limit(limit)
                     .skip(page * limit)
                     .sort({ createdAt: -1, updatedAt: -1 });
@@ -139,35 +135,35 @@ const getAllProduct = (limit, page, sort, filter) => {
                     status: 'OK',
                     message: 'Success',
                     data: allObjectFilter,
-                    total: totalProduct,
+                    total: totalCategory,
                     pageCurrent: Number(page + 1),
-                    totalPage: Math.ceil(totalProduct / limit),
+                    totalPage: Math.ceil(totalCategory / limit),
                 });
             }
 
             if (sort) {
                 const objectSort = {};
                 objectSort[sort[1]] = sort[0];
-                const allProductSort = await Product.find()
+                const allCategorySort = await Category.find()
                     .limit(limit)
                     .skip(page * limit)
                     .sort(objectSort);
                 resolve({
                     status: 'OK',
                     message: 'Success',
-                    data: allProductSort,
-                    total: totalProduct,
+                    data: allCategorySort,
+                    total: totalCategory,
                     pageCurrent: Number(page + 1),
-                    totalPage: Math.ceil(totalProduct / limit),
+                    totalPage: Math.ceil(totalCategory / limit),
                 });
             }
 
-            let allProduct = [];
+            let allCategory = [];
 
             if (!limit && !page) {
-                allProduct = await Product.find().sort({ createdAt: -1, updatedAt: -1 });
+                allCategory = await Category.find().sort({ createdAt: -1, updatedAt: -1 });
             } else {
-                allProduct = await Product.find()
+                allCategory = await Category.find()
                     .limit(limit)
                     .skip(page * limit)
                     .sort({ createdAt: -1, updatedAt: -1 });
@@ -176,20 +172,21 @@ const getAllProduct = (limit, page, sort, filter) => {
             resolve({
                 status: 'OK',
                 message: 'Success',
-                data: allProduct,
-                total: totalProduct,
+                data: allCategory,
+                total: totalCategory,
                 pageCurrent: Number(page + 1),
-                totalPage: Math.ceil(totalProduct / limit),
+                totalPage: Math.ceil(totalCategory / limit),
             });
         } catch (e) {
             reject(e);
         }
     });
 };
+
 const getAllType = () => {
     return new Promise(async (resolve, reject) => {
         try {
-            const allType = await Product.distinct('type')
+            const allType = await Category.distinct('type')
             resolve({
                 status: 'OK',
                 message: 'Success',
@@ -202,11 +199,11 @@ const getAllType = () => {
 }
 
 module.exports = {
-    createProduct,
-    updateProduct,
-    getDetailsProduct,
-    deleteProduct,
-    getAllProduct,
-    deleteManyProduct,
+    createCategory,
+    updateCategory,
+    getDetailsCategory,
+    deleteCategory,
+    getAllCategory,
+    deleteManyCategory,
     getAllType
 }

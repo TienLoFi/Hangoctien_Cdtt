@@ -1,30 +1,30 @@
-const Brand = require("../models/BrandModel");
+const Menu = require("../models/MenuModel");
 
-const createBrand = (newBrand) => {
+const createMenu = (newMenu) => {
     return new Promise(async (resolve, reject) => {
-        const { name, description, logo } = newBrand;
+        const { name, position, link } = newMenu;
         try {
-            const checkBrand = await Brand.findOne({
+            const checkMenu = await Menu.findOne({
                 name: name
             });
-            if (checkBrand !== null) {
+            if (checkMenu !== null) {
                 resolve({
                     status: 'ERR',
                     message: 'The name of the brand already exists.'
                 });
             }
 
-            const newBrand = await Brand.create({
+            const newMenu = await Menu.create({
                 name,
-                description,
-                logo,
+                position,
+                link,
             });
 
-            if (newBrand) {
+            if (newMenu) {
                 resolve({
                     status: 'OK',
                     message: 'SUCCESS',
-                    data: newBrandObject
+                    data: newMenuObject
                 });
             }
         } catch (e) {
@@ -33,25 +33,25 @@ const createBrand = (newBrand) => {
     });
 };
 
-const updateBrand = (id, data) => {
+const updateMenu = (id, data) => {
     return new Promise(async (resolve, reject) => {
         try {
-            const checkBrand = await Brand.findOne({
+            const checkMenu = await Menu.findOne({
                 _id: id
             });
 
-            if (checkBrand === null) {
+            if (checkMenu === null) {
                 resolve({
                     status: 'ERR',
                     message: 'The brand is not defined.'
                 });
             }
 
-            const updatedBrand = await Brand.findByIdAndUpdate(id, data, { new: true });
+            const updatedMenu = await Menu.findByIdAndUpdate(id, data, { new: true });
             resolve({
                 status: 'OK',
                 message: 'SUCCESS',
-                data: updatedBrand
+                data: updatedMenu
             });
         } catch (e) {
             reject(e);
@@ -59,21 +59,21 @@ const updateBrand = (id, data) => {
     });
 };
 
-const deleteBrand = (id) => {
+const deleteMenu = (id) => {
     return new Promise(async (resolve, reject) => {
         try {
-            const checkBrand = await Brand.findOne({
+            const checkMenu = await Menu.findOne({
                 _id: id
             });
 
-            if (checkBrand === null) {
+            if (checkMenu === null) {
                 resolve({
                     status: 'ERR',
                     message: 'The brand is not defined.'
                 });
             }
 
-            await Brand.findByIdAndDelete(id);
+            await Menu.findByIdAndDelete(id);
 
             resolve({
                 status: 'OK',
@@ -85,25 +85,25 @@ const deleteBrand = (id) => {
     });
 };
 
-const getAllBrand = () => {
+const getAllMenu = () => {
     return new Promise(async (resolve, reject) => {
         try {
-            const allBrands = await Brand.find();
+            const allMenus = await Menu.find();
 
             resolve({
                 status: 'OK',
                 message: 'Success',
-                data: allBrands
+                data: allMenus
             });
         } catch (e) {
             reject(e);
         }
     });
 };
-const deleteManyBrand = (ids) => {
+const deleteManyMenu = (ids) => {
     return new Promise(async (resolve, reject) => {
         try {
-            await Brand.deleteMany({ _id: ids })
+            await Menu.deleteMany({ _id: ids })
             resolve({
                 status: 'OK',
                 message: 'Delete product success',
@@ -113,10 +113,10 @@ const deleteManyBrand = (ids) => {
         }
     })
 }
-const getDetailsBrand = (id) => {
+const getDetailsMenu = (id) => {
     return new Promise(async (resolve, reject) => {
         try {
-            const brand = await Brand.findOne({
+            const brand = await Menu.findOne({
                 _id: id
             })
             if (brand === null) {
@@ -138,10 +138,10 @@ const getDetailsBrand = (id) => {
 }
 
 module.exports = {
-    createBrand,
-    updateBrand,
-    deleteBrand,
-    getAllBrand,
-    deleteManyBrand,
-    getDetailsBrand
+    createMenu,
+    updateMenu,
+    deleteMenu,
+    getAllMenu,
+    deleteManyMenu,
+    getDetailsMenu
 };

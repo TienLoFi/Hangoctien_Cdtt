@@ -2,19 +2,27 @@ import { Menu } from 'antd'
 import React, { useEffect, useState } from 'react'
 import { getItem } from '../../utils';
 import { UserOutlined, AppstoreOutlined, ShoppingCartOutlined ,MailOutlined,StarOutlined} from '@ant-design/icons'
+
+
 import HeaderComponent from '../../components/HeaderComponent/HeaderComponent';
 import AdminUser from '../../components/AdminUser/AdminUser';
 import AdminProduct from '../../components/AdminProduct/AdminProduct';
 import OrderAdmin from '../../components/OrderAdmin/OrderAdmin';
-import AdminBrand from '../../components/AdminBrand/AdminBrand';
-import AdminBanner from '../../components/AdminBanner/AdminBanner';
-import AdminPost from '../../components/AdminPost/AdminPost';
+import AdminBrand from '../../components/Backend/AdminBrand/AdminBrand';
+import AdminMenu from '../../components/Backend/AdminMenu/AdminMenu';
+import AdminSlider from '../../components/Backend/AdminSlider/AdminSlider';
+import AdminPost from '../../components/Backend/AdminPost/AdminPost';
+import AdminCategory from '../../components/Backend/AdminCategory/AdminCategory';
+
+//service
 import * as OrderService from '../../services/OrderService'
 import * as ProductService from '../../services/ProductService'
 import * as UserService from '../../services/UserService'
 import * as BrandService from '../../services/BrandService'
-import * as BannerService from '../../services/BannerService'
-
+import * as SliderService from '../../services/SliderService'
+import * as PostService from '../../services/PostService'
+import * as MenuService from '../../services/MenuService'
+import * as CategoryService from '../../services/CategoryService'
 
 import CustomizedContent from './components/CustomizedContent';
 import { useSelector } from 'react-redux';
@@ -22,18 +30,23 @@ import { useQueries } from '@tanstack/react-query';
 import { useMemo } from 'react';
 import Loading from '../../components/LoadingComponent/Loading';
 
+
 const AdminPage = () => {
   const user = useSelector((state) => state?.user)
 
   const items = [
     getItem('Quản Lí Người dùng', 'users', <UserOutlined />),
-    getItem('Quản Lí Sản phẩm', 'products', <AppstoreOutlined />),    
+    getItem('Quản Lí Sản phẩm', 'products', <AppstoreOutlined />), 
+    getItem('Quản Lí Danh Mục', 'categories', <MailOutlined  />),
+   
     getItem('Quản Lí Thương Hiệu', 'brands', <StarOutlined />),  
     getItem('Quản Lí Đơn hàng', 'orders', <ShoppingCartOutlined />),
     getItem('Quản Lí Bài Viết', 'posts', <MailOutlined  />),
     getItem('Quản Lí Banner', 'banners', <MailOutlined  />),
-    
+    getItem('Quản Lí Menu', 'menus', <MailOutlined  />),
+  
   ];
+
 
   const [keySelected, setKeySelected] = useState('');
   const getAllOrder = async () => {
@@ -46,7 +59,16 @@ const AdminPage = () => {
     console.log('res1', res)
     return {data: res?.data, key: 'products'}
   }
-
+  const getAllPost = async () => {
+    const res = await PostService.getAllPost
+    console.log('res', res)
+    return {data: res?.data, key: 'posts'}
+  }
+  const getAllMenu = async () => {
+    const res = await MenuService.getAllMenu
+    console.log('res', res)
+    return {data: res?.data, key: 'posts'}
+  }
   const getAllUsers = async () => {
     const res = await UserService.getAllUser(user?.access_token)
     console.log('res', res)
@@ -57,18 +79,29 @@ const AdminPage = () => {
     console.log('res', res)
     return {data: res?.data, key: 'brands'}
   }
-  const getAllBanners = async () => {
-    const res = await BannerService.getAllBanner
+  const getAllSlider = async () => {
+    const res = await SliderService.getAllSlider
     console.log('res', res)
     return {data: res?.data, key: 'brands'}
   }
+  const getAllCategory = async () => {
+    const res = await CategoryService.getAllCategory
+    console.log('res', res)
+    return {data: res?.data, key: 'categories'}
+  }
+
+
+
   const queries = useQueries({
     queries: [
       {queryKey: ['products'], queryFn: getAllProducts, staleTime: 1000 * 60},
       {queryKey: ['users'], queryFn: getAllUsers, staleTime: 1000 * 60},
       {queryKey: ['brands'], queryFn: getAllBrands, staleTime: 1000 * 60},
-      {queryKey: ['banners'], queryFn: getAllBanners, staleTime: 1000 * 60},
-      // {queryKey: ['orders'], queryFn: getAllOrder, staleTime: 1000 * 60},
+      {queryKey: ['sliders'], queryFn: getAllSlider, staleTime: 1000 * 60},
+      {queryKey: ['posts'], queryFn: getAllPost, staleTime: 1000 * 60}, 
+      {queryKey: ['orders'], queryFn: getAllOrder, staleTime: 1000 * 60},
+      {queryKey: ['menus'], queryFn: getAllMenu, staleTime: 1000 * 60},
+      {queryKey: ['categories'], queryFn: getAllCategory, staleTime: 1000 * 60},
     ]
   })
   const memoCount = useMemo(() => {
@@ -108,14 +141,22 @@ const AdminPage = () => {
           return (
             <AdminBrand />
           )
-          case 'post':
+          case 'posts':
             return (
-              <AdminPost />
-            )
+              <AdminPost/>
+            ) 
             case 'banners':
               return (
-                <AdminBanner/>
+                <AdminSlider/>
+              )   
+               case 'menus':
+              return (
+                <AdminMenu/>
               )
+              case 'categories':
+                return (
+                  <AdminCategory/>
+                )
       default:
         return <></>
     }

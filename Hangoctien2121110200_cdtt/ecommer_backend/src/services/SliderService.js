@@ -1,34 +1,32 @@
-const Product = require("../models/ProductModel")
+const Slider = require("../models/SliderModel")
 
-const createProduct = (newProduct) => {
+const createSlider = (newSlider) => {
     return new Promise(async (resolve, reject) => {
-        const { name, image, imageDetail,type, countInStock, price, rating, description,discount } = newProduct
+        const { name, image, type, link, position,  description } = newSlider
         try {
-            const checkProduct = await Product.findOne({
+            const checkSlider = await Slider.findOne({
                 name: name
             })
-            if (checkProduct !== null) {
+            if (checkSlider !== null) {
                 resolve({
                     status: 'ERR',
-                    message: 'The name of product is already'
+                    message: 'The name of slider is already'
                 })
             }
-            const newProduct = await Product.create({
+            const newSlider = await Slider.create({
                 name, 
                 image, 
-                imageDetail,
                 type, 
-                countInStock: Number(countInStock), 
-                price, 
-                rating, 
+                link ,
+                position, 
+                
                 description,
-                discount: Number(discount),
             })
-            if (newProduct) {
+            if (newSlider) {
                 resolve({
                     status: 'OK',
                     message: 'SUCCESS',
-                    data: newProduct
+                    data: newSlider
                 })
             }
         } catch (e) {
@@ -37,24 +35,24 @@ const createProduct = (newProduct) => {
     })
 }
 
-const updateProduct = (id, data) => {
+const updateSlider = (id, data) => {
     return new Promise(async (resolve, reject) => {
         try {
-            const checkProduct = await Product.findOne({
+            const checkSlider = await Slider.findOne({
                 _id: id
             })
-            if (checkProduct === null) {
+            if (checkSlider === null) {
                 resolve({
                     status: 'ERR',
-                    message: 'The product is not defined'
+                    message: 'The slider is not defined'
                 })
             }
 
-            const updatedProduct = await Product.findByIdAndUpdate(id, data, { new: true })
+            const updatedSlider = await Slider.findByIdAndUpdate(id, data, { new: true })
             resolve({
                 status: 'OK',
                 message: 'SUCCESS',
-                data: updatedProduct
+                data: updatedSlider
             })
         } catch (e) {
             reject(e)
@@ -62,23 +60,23 @@ const updateProduct = (id, data) => {
     })
 }
 
-const deleteProduct = (id) => {
+const deleteSlider = (id) => {
     return new Promise(async (resolve, reject) => {
         try {
-            const checkProduct = await Product.findOne({
+            const checkSlider = await Slider.findOne({
                 _id: id
             })
-            if (checkProduct === null) {
+            if (checkSlider === null) {
                 resolve({
                     status: 'ERR',
-                    message: 'The product is not defined'
+                    message: 'The slider is not defined'
                 })
             }
 
-            await Product.findByIdAndDelete(id)
+            await Slider.findByIdAndDelete(id)
             resolve({
                 status: 'OK',
-                message: 'Delete product success',
+                message: 'Delete slider success',
             })
         } catch (e) {
             reject(e)
@@ -86,13 +84,13 @@ const deleteProduct = (id) => {
     })
 }
 
-const deleteManyProduct = (ids) => {
+const deleteManySlider = (ids) => {
     return new Promise(async (resolve, reject) => {
         try {
-            await Product.deleteMany({ _id: ids })
+            await Slider.deleteMany({ _id: ids })
             resolve({
                 status: 'OK',
-                message: 'Delete product success',
+                message: 'Delete slider success',
             })
         } catch (e) {
             reject(e)
@@ -100,23 +98,23 @@ const deleteManyProduct = (ids) => {
     })
 }
 
-const getDetailsProduct = (id) => {
+const getDetailsSlider = (id) => {
     return new Promise(async (resolve, reject) => {
         try {
-            const product = await Product.findOne({
+            const slider = await Slider.findOne({
                 _id: id
             })
-            if (product === null) {
+            if (slider === null) {
                 resolve({
                     status: 'ERR',
-                    message: 'The product is not defined'
+                    message: 'The slider is not defined'
                 })
             }
 
             resolve({
                 status: 'OK',
                 message: 'SUCESS',
-                data: product
+                data: slider
             })
         } catch (e) {
             reject(e)
@@ -124,14 +122,14 @@ const getDetailsProduct = (id) => {
     })
 }
 
-const getAllProduct = (limit, page, sort, filter) => {
+const getAllSlider = (limit, page, sort, filter) => {
     return new Promise(async (resolve, reject) => {
         try {
-            const totalProduct = await Product.countDocuments();
+            const totalSlider = await Slider.countDocuments();
 
             if (filter) {
                 const label = filter[0];
-                const allObjectFilter = await Product.find({ [label]: { '$regex': filter[1] } })
+                const allObjectFilter = await Slider.find({ [label]: { '$regex': filter[1] } })
                     .limit(limit)
                     .skip(page * limit)
                     .sort({ createdAt: -1, updatedAt: -1 });
@@ -139,35 +137,35 @@ const getAllProduct = (limit, page, sort, filter) => {
                     status: 'OK',
                     message: 'Success',
                     data: allObjectFilter,
-                    total: totalProduct,
+                    total: totalSlider,
                     pageCurrent: Number(page + 1),
-                    totalPage: Math.ceil(totalProduct / limit),
+                    totalPage: Math.ceil(totalSlider / limit),
                 });
             }
 
             if (sort) {
                 const objectSort = {};
                 objectSort[sort[1]] = sort[0];
-                const allProductSort = await Product.find()
+                const allSliderSort = await Slider.find()
                     .limit(limit)
                     .skip(page * limit)
                     .sort(objectSort);
                 resolve({
                     status: 'OK',
                     message: 'Success',
-                    data: allProductSort,
-                    total: totalProduct,
+                    data: allSliderSort,
+                    total: totalSlider,
                     pageCurrent: Number(page + 1),
-                    totalPage: Math.ceil(totalProduct / limit),
+                    totalPage: Math.ceil(totalSlider / limit),
                 });
             }
 
-            let allProduct = [];
+            let allSlider = [];
 
             if (!limit && !page) {
-                allProduct = await Product.find().sort({ createdAt: -1, updatedAt: -1 });
+                allSlider = await Slider.find().sort({ createdAt: -1, updatedAt: -1 });
             } else {
-                allProduct = await Product.find()
+                allSlider = await Slider.find()
                     .limit(limit)
                     .skip(page * limit)
                     .sort({ createdAt: -1, updatedAt: -1 });
@@ -176,20 +174,21 @@ const getAllProduct = (limit, page, sort, filter) => {
             resolve({
                 status: 'OK',
                 message: 'Success',
-                data: allProduct,
-                total: totalProduct,
+                data: allSlider,
+                total: totalSlider,
                 pageCurrent: Number(page + 1),
-                totalPage: Math.ceil(totalProduct / limit),
+                totalPage: Math.ceil(totalSlider / limit),
             });
         } catch (e) {
             reject(e);
         }
     });
 };
+
 const getAllType = () => {
     return new Promise(async (resolve, reject) => {
         try {
-            const allType = await Product.distinct('type')
+            const allType = await Slider.distinct('type')
             resolve({
                 status: 'OK',
                 message: 'Success',
@@ -202,11 +201,11 @@ const getAllType = () => {
 }
 
 module.exports = {
-    createProduct,
-    updateProduct,
-    getDetailsProduct,
-    deleteProduct,
-    getAllProduct,
-    deleteManyProduct,
+    createSlider,
+    updateSlider,
+    getDetailsSlider,
+    deleteSlider,
+    getAllSlider,
+    deleteManySlider,
     getAllType
 }

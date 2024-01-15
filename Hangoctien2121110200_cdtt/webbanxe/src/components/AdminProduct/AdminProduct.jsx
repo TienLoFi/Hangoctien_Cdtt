@@ -648,8 +648,8 @@ const handleOnchangeAvatarsMultiple = async ({ fileList }) => {
               />
             </Form.Item>
             <Form.Item
-              label="Name"
-              name="name"
+              label="Brand"
+              name="brand"
               rules={[{ required: true, message: "Please input your brand!" }]}
             >
                <Select

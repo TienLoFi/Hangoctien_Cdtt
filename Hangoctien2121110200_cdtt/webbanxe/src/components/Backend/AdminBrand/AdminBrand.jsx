@@ -7,21 +7,21 @@ import {
 } from "@ant-design/icons";
 import React, { useRef } from "react";
 import { WrapperHeader, WrapperUploadFile } from "./style";
-import TableComponent from "../TableComponent/TableComponent";
+import TableComponent from "../../TableComponent/TableComponent";
 import { useState } from "react";
-import InputComponent from "../InputComponent/InputComponent";
-import { getBase64, renderOptions } from "../../utils";
-import * as BannerService from "../../services/BannerService";
-import { useMutationHooks } from "../../hooks/useMutationHook";
-import Loading from "../LoadingComponent/Loading";
+import InputComponent from "../../InputComponent/InputComponent";
+import { getBase64, renderOptions } from "../../../utils";
+import * as BrandService from "../../../services/BrandService";
+import { useMutationHooks } from "../../../hooks/useMutationHook";
+import Loading from "../../LoadingComponent/Loading";
 import { useEffect } from "react";
-import * as message from "../Message/Message";
+import * as message from "../../Message/Message";
 import { useQuery } from "@tanstack/react-query";
-import DrawerComponent from "../DrawerComponent/DrawerComponent";
+import DrawerComponent from "../../DrawerComponent/DrawerComponent";
 import { useSelector } from "react-redux";
-import ModalComponent from "../ModalComponent/ModalComponent";
+import ModalComponent from "../../ModalComponent/ModalComponent";
 
-const AdminBanner = () => {
+const AdminBrand = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [rowSelected, setRowSelected] = useState("");
   const [isOpenDrawer, setIsOpenDrawer] = useState(false);
@@ -31,11 +31,11 @@ const AdminBanner = () => {
   const searchInput = useRef(null);
   const inittial = () => ({
     name: "",
-
+    description: "",
     logo: "",
   });
-  const [stateBanner, setStateBanner] = useState(inittial());
-  const [stateBannerDetails, setStateBannerDetails] = useState(inittial());
+  const [stateBrand, setStateBrand] = useState(inittial());
+  const [stateBrandDetails, setStateBrandDetails] = useState(inittial());
 
   const [form] = Form.useForm();
 
@@ -43,14 +43,14 @@ const AdminBanner = () => {
     const {
       name,
 
-     
+      description,
 
       logo,
     } = data;
-    const res = BannerService.createBanner({
+    const res = BrandService.createBrand({
       name,
 
-     
+      description,
 
       logo,
     });
@@ -58,34 +58,34 @@ const AdminBanner = () => {
   });
   const mutationUpdate = useMutationHooks((data) => {
     const { id, token, ...rests } = data;
-    const res = BannerService.updateBanner(id, token, { ...rests });
+    const res = BrandService.updateBrand(id, token, { ...rests });
     return res;
   });
 
   const mutationDeleted = useMutationHooks((data) => {
     const { id, token } = data;
-    const res = BannerService.deleteBanner(id, token);
+    const res = BrandService.deleteBrand(id, token);
     return res;
   });
 
   const mutationDeletedMany = useMutationHooks((data) => {
     const { token, ...ids } = data;
-    const res = BannerService.deleteManyBanner(ids, token);
+    const res = BrandService.deleteManyBrand(ids, token);
     return res;
   });
 
-  const getAllBanners = async () => {
-    const res = await BannerService.getAllBanner();
+  const getAllBrands = async () => {
+    const res = await BrandService.getAllBrand();
     return res;
   };
 
-  const fetchGetDetailsBanners = async (rowSelected) => {
-    const res = await BannerService.getDetailsBanner(rowSelected);
+  const fetchGetDetailsBrands = async (rowSelected) => {
+    const res = await BrandService.getDetailsBrand(rowSelected);
     if (res?.data) {
-      setStateBannerDetails({
+      setStateBrandDetails({
         name: res?.data?.name,
 
-      
+        description: res?.data?.description,
 
         logo: res?.data?.logo,
       });
@@ -95,29 +95,29 @@ const AdminBanner = () => {
 
   useEffect(() => {
     if (!isModalOpen) {
-      form.setFieldsValue(stateBannerDetails);
+      form.setFieldsValue(stateBrandDetails);
     } else {
       form.setFieldsValue(inittial());
     }
-  }, [form, stateBannerDetails, isModalOpen]);
+  }, [form, stateBrandDetails, isModalOpen]);
 
   useEffect(() => {
     if (rowSelected && isOpenDrawer) {
       setIsLoadingUpdate(true);
-      fetchGetDetailsBanners(rowSelected);
+      fetchGetDetailsBrands(rowSelected);
     }
   }, [rowSelected, isOpenDrawer]);
 
-  const handleDetailsBanners = () => {
+  const handleDetailsBrands = () => {
     setIsOpenDrawer(true);
   };
 
-  const handleDelteManyBanners = (ids) => {
+  const handleDelteManyBrands = (ids) => {
     mutationDeletedMany.mutate(
       { ids: ids, token: user?.access_token },
       {
         onSettled: () => {
-          queryBanner.refetch();
+          queryBrand.refetch();
         },
       }
     );
@@ -143,12 +143,12 @@ const AdminBanner = () => {
     isError: isErrorDeletedMany,
   } = mutationDeletedMany;
 
-  const queryBanner = useQuery({
-    queryKey: ["banners"],
-    queryFn: getAllBanners,
+  const queryBrand = useQuery({
+    queryKey: ["brands"],
+    queryFn: getAllBrands,
   });
 
-  const { isLoading: isLoadingBanners, data: banners } = queryBanner;
+  const { isLoading: isLoadingBrands, data: brands } = queryBrand;
   const renderAction = () => {
     return (
       <div>
@@ -158,7 +158,7 @@ const AdminBanner = () => {
         />
         <EditOutlined
           style={{ color: "orange", fontSize: "30px", cursor: "pointer" }}
-          onClick={handleDetailsBanners}
+          onClick={handleDetailsBrands}
         />
       </div>
     );
@@ -255,23 +255,45 @@ const AdminBanner = () => {
   });
 
   const columns = [
+
+ {
+      title: 'Hình ảnh',
+    dataIndex: 'image',
+    render: (image) => (
+      <img
+        src={image}
+        style={{
+          height: '60px',
+          width: '60px',
+          borderRadius: '50%',
+          objectFit: 'cover',
+        }}
+        alt="Hình ảnh"
+      />
+    ),
+
+    },   
     {
-      title: "Name",
+      title: "Tên thương hiệu",
       dataIndex: "name",
       sorter: (a, b) => a.name.length - b.name.length,
       ...getColumnSearchProps("name"),
-    },
-
+    }, 
     {
-      title: "Action",
+      title: 'Mô tả thương hiệu',
+      dataIndex: 'description',
+    },
+    {
+      title: "Chức Năng",
       dataIndex: "action",
       render: renderAction,
     },
+  
   ];
   const dataTable =
-    banners?.data?.length &&
-    banners?.data?.map((banner) => {
-      return { ...banner, key: banner._id };
+    brands?.data?.length &&
+    brands?.data?.map((brand) => {
+      return { ...brand, key: brand._id };
     });
 
   useEffect(() => {
@@ -302,7 +324,7 @@ const AdminBanner = () => {
 
   const handleCloseDrawer = () => {
     setIsOpenDrawer(false);
-    setStateBannerDetails({
+    setStateBrandDetails({
       name: "",
 
       description: "",
@@ -325,12 +347,12 @@ const AdminBanner = () => {
     setIsModalOpenDelete(false);
   };
 
-  const handleDeleteBanner = () => {
+  const handleDeleteBrand = () => {
     mutationDeleted.mutate(
       { id: rowSelected, token: user?.access_token },
       {
         onSettled: () => {
-          queryBanner.refetch();
+          queryBrand.refetch();
         },
       }
     );
@@ -338,7 +360,7 @@ const AdminBanner = () => {
 
   const handleCancel = () => {
     setIsModalOpen(false);
-    setStateBanner({
+    setStateBrand({
       name: "",
 
       description: "",
@@ -347,32 +369,30 @@ const AdminBanner = () => {
     });
     form.resetFields();
   };
-
   const onFinish = () => {
     const params = {
-      name: stateBanner.name,
-
-      description: stateBanner.description,
-
-      logo: stateBanner.logo,
-    };
+      name: stateBrand.name,
+      description: stateBrand.description,
+ 
+      logo: stateBrand.logo,
+    }
     mutation.mutate(params, {
       onSettled: () => {
-        queryBanner.refetch();
-      },
-    });
-  };
+        queryBrand.refetch()
+      }
+    })  
+  }
 
   const handleOnchange = (e) => {
-    setStateBanner({
-      ...stateBanner,
+    setStateBrand({
+      ...stateBrand,
       [e.target.name]: e.target.value,
     });
   };
 
   const handleOnchangeDetails = (e) => {
-    setStateBannerDetails({
-      ...stateBannerDetails,
+    setStateBrandDetails({
+      ...stateBrandDetails,
       [e.target.name]: e.target.value,
     });
   };
@@ -383,8 +403,8 @@ const AdminBanner = () => {
       file.preview = await getBase64(file.originFileObj);
     }
 
-    setStateBanner({
-      ...stateBanner,
+    setStateBrand({
+      ...stateBrand,
       logo: file.preview,
     });
   };
@@ -394,33 +414,33 @@ const AdminBanner = () => {
     if (!file.url && !file.preview) {
       file.preview = await getBase64(file.originFileObj);
     }
-    setStateBannerDetails({
-      ...stateBannerDetails,
+    setStateBrandDetails({
+      ...stateBrandDetails,
       logo: file.preview,
     });
   };
 
   const onUpdateProduct = () => {
     mutationUpdate.mutate(
-      { id: rowSelected, token: user?.access_token, ...stateBannerDetails },
+      { id: rowSelected, token: user?.access_token, ...stateBrandDetails },
       {
         onSettled: () => {
-          queryBanner.refetch();
+          queryBrand.refetch();
         },
       }
     );
   };
 
   const handleChangeSelect = (value) => {
-    setStateBanner({
-      ...stateBanner,
+    setStateBrand({
+      ...stateBrand,
       type: value,
     });
   };
 
   return (
     <div>
-      <WrapperHeader>Quản lý Banner</WrapperHeader>
+      <WrapperHeader>Quản lý Thương Hiệu</WrapperHeader>
       <div style={{ marginTop: "10px" }}>
         <Button
           style={{
@@ -436,9 +456,9 @@ const AdminBanner = () => {
       </div>
       <div style={{ marginTop: "20px" }}>
         <TableComponent
-          handleDelteMany={handleDelteManyBanners}
+          handleDelteMany={handleDelteManyBrands}
           columns={columns}
-          isLoading={isLoadingBanners}
+          isLoading={isLoadingBrands}
           data={dataTable}
           onRow={(record, rowIndex) => {
             return {
@@ -449,14 +469,9 @@ const AdminBanner = () => {
           }}
         />
       </div>
-      <ModalComponent
-        forceRender
-        title="Tạo Banner"
-        open={isModalOpen}
-        onCancel={handleCancel}
-        footer={null}
-      >
+      <ModalComponent forceRender title="Tạo thương hiệu" open={isModalOpen} onCancel={handleCancel} footer={null}>
         <Loading isLoading={isLoading}>
+
           <Form
             name="basic"
             labelCol={{ span: 6 }}
@@ -466,30 +481,46 @@ const AdminBanner = () => {
             form={form}
           >
             <Form.Item
-              label="Name"
+              label="Tên thương hiệu"
               name="name"
               rules={[{ required: true, message: "Please input your name!" }]}
             >
               <InputComponent
-                value={stateBanner["name"]}
+                value={stateBrand["name"]}
                 onChange={handleOnchange}
                 name="name"
               />
             </Form.Item>
 
+            <Form.Item
+              label="Mô Tả"
+              name="description"
+              rules={[
+                {
+                  required: true,
+                  message: "Please input your count description!",
+                },
+              ]}
+            >
+              <InputComponent
+                value={stateBrand.description}
+                onChange={handleOnchange}
+                name="description"
+              />
+            </Form.Item>
 
             <Form.Item
-              label="Image"
+              label="Hình Ảnh"
               name="image"
               rules={[
                 { required: true, message: "Please input your count image!" },
               ]}
             >
               <WrapperUploadFile onChange={handleOnchangeAvatar} maxCount={1}>
-                <Button>Select File</Button>
-                {stateBanner?.logo && (
+                <Button>Chọn Ảnh</Button>
+                {stateBrand?.logo && (
                   <img
-                    src={stateBanner?.logo}
+                    src={stateBrand?.logo}
                     style={{
                       height: "60px",
                       width: "60px",
@@ -505,14 +536,14 @@ const AdminBanner = () => {
 
             <Form.Item wrapperCol={{ offset: 20, span: 16 }}>
               <Button type="primary" htmlType="submit">
-                Submit
+                Thêm
               </Button>
             </Form.Item>
           </Form>
         </Loading>
       </ModalComponent>
       <DrawerComponent
-        title="Chi tiết Banner"
+        title="Chi tiết Thương Hiệu"
         isOpen={isOpenDrawer}
         onClose={() => setIsOpenDrawer(false)}
         width="90%"
@@ -527,19 +558,19 @@ const AdminBanner = () => {
             form={form}
           >
             <Form.Item
-              label="Name"
+              label="Tên thương hiệu"
               name="name"
               rules={[{ required: true, message: "Please input your name!" }]}
             >
               <InputComponent
-                value={stateBannerDetails["name"]}
+                value={stateBrandDetails["name"]}
                 onChange={handleOnchangeDetails}
                 name="name"
               />
             </Form.Item>
 
             <Form.Item
-              label="Description"
+              label="Mô Tả "
               name="description"
               rules={[
                 {
@@ -549,14 +580,14 @@ const AdminBanner = () => {
               ]}
             >
               <InputComponent
-                value={stateBannerDetails.description}
+                value={stateBrandDetails.description}
                 onChange={handleOnchangeDetails}
                 name="description"
               />
             </Form.Item>
 
             <Form.Item
-              label="Image"
+              label="Hình Ảnh"
               name="image"
               rules={[
                 { required: true, message: "Please input your count image!" },
@@ -566,10 +597,10 @@ const AdminBanner = () => {
                 onChange={handleOnchangeAvatarDetails}
                 maxCount={1}
               >
-                <Button>Select File</Button>
-                {stateBannerDetails?.logo && (
+                <Button>Chọn Ảnh </Button>
+                {stateBrandDetails?.logo && (
                   <img
-                    src={stateBannerDetails?.logo}
+                    src={stateBrandDetails?.logo}
                     style={{
                       height: "60px",
                       width: "60px",
@@ -585,24 +616,24 @@ const AdminBanner = () => {
 
             <Form.Item wrapperCol={{ offset: 20, span: 16 }}>
               <Button type="primary" htmlType="submit">
-                Apply
+                Lưu
               </Button>
             </Form.Item>
           </Form>
         </Loading>
       </DrawerComponent>
       <ModalComponent
-        title="Xóa Banner"
+        title="Xóa Thương Hiệu"
         open={isModalOpenDelete}
         onCancel={handleCancelDelete}
-        onOk={handleDeleteBanner}
+        onOk={handleDeleteBrand}
       >
         <Loading isLoading={isLoadingDeleted}>
-          <div>Bạn có chắc xóa Banner này không?</div>
+          <div>Bạn có chắc xóa Thương Hiệu này không?</div>
         </Loading>
       </ModalComponent>
     </div>
   );
 };
 
-export default AdminBanner;
+export default AdminBrand;

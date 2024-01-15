@@ -13,7 +13,8 @@ const productSchema = new mongoose.Schema(
     discount: { type: Number },
     selled: { type: Number },
     quality: { type: Number },
-    brand: { type: mongoose.Schema.Types.ObjectId, ref: 'Brand' }, // Sử dụng reference để liên kết với bảng brands     
+    brand: { type: mongoose.Schema.Types.ObjectId, ref: 'Brand' }, // Sử dụng reference để liên kết với bảng brands    
+    category: { type: mongoose.Schema.Types.ObjectId, ref: 'Category' }, // Sử dụng reference để liên kết với bảng brands    
   },
   {
     timestamps: true,

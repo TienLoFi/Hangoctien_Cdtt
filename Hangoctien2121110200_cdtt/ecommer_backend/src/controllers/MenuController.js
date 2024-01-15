@@ -1,15 +1,15 @@
-const BannerService = require('../services/BannerService');
+const MenuService = require('../services/MenuService');
 
-const createBanner = async (req, res) => {
+const createMenu = async (req, res) => {
     try {
-        const { name,  logo } = req.body;
-        if (!name||!logo) {
+        const { name, position, link } = req.body;
+        if (!name||!link) {
             return res.status(200).json({
                 status: 'ERR',
                 message: 'The input is required'
             });
         }
-        const response = await BannerService.createBanner(req.body);
+        const response = await MenuService.createMenu(req.body);
         return res.status(201).json(response);
     } catch (e) {
         return res.status(404).json({
@@ -18,17 +18,17 @@ const createBanner = async (req, res) => {
     }
 }
 
-const updateBanner = async (req, res) => {
+const updateMenu = async (req, res) => {
     try {
-        const BannerId = req.params.id;
+        const menuId = req.params.id;
         const data = req.body;
-        if (!BannerId) {
+        if (!menuId) {
             return res.status(400).json({
                 status: 'ERR',
-                message: 'The BannerId is required for updating a Banner'
+                message: 'The menuId is required for updating a menu'
             });
         }
-        const response = await BannerService.updateBanner(BannerId, data);
+        const response = await MenuService.updateMenu(menuId, data);
         return res.status(200).json(response);
     } catch (e) {
         return res.status(500).json({
@@ -37,16 +37,16 @@ const updateBanner = async (req, res) => {
     }
 }
 
-const getDetailsBanner = async (req, res) => {
+const getDetailsMenu = async (req, res) => {
     try {
-        const BannerId = req.params.id;
-        if (!BannerId) {
+        const menuId = req.params.id;
+        if (!menuId) {
             return res.status(400).json({
                 status: 'ERR',
-                message: 'The BannerId is required to get details of a Banner'
+                message: 'The menuId is required to get details of a menu'
             });
         }
-        const response = await BannerService.getDetailsBanner(BannerId);
+        const response = await MenuService.getDetailsMenu(menuId);
         return res.status(200).json(response);
     } catch (e) {
         return res.status(500).json({
@@ -56,16 +56,16 @@ const getDetailsBanner = async (req, res) => {
 }
 
 
-const deleteBanner = async (req, res) => {
+const deleteMenu = async (req, res) => {
     try {
-        const BannerId = req.params.id;
-        if (!BannerId) {
+        const menuId = req.params.id;
+        if (!menuId) {
             return res.status(400).json({
                 status: 'ERR',
-                message: 'The BannerId is required for deleting a Banner'
+                message: 'The menuId is required for deleting a menu'
             });
         }
-        const response = await BannerService.deleteBanner(BannerId);
+        const response = await MenuService.deleteMenu(menuId);
         return res.status(200).json(response);
     } catch (e) {
         return res.status(500).json({
@@ -83,7 +83,7 @@ const deleteMany = async (req, res) => {
                 message: 'The ids is required'
             })
         }
-        const response = await BannerService.deleteManyBanner(ids)
+        const response = await MenuService.deleteManyMenu(ids)
         return res.status(200).json(response)
     } catch (e) {
         return res.status(404).json({
@@ -91,10 +91,10 @@ const deleteMany = async (req, res) => {
         })
     }
 }
-const getAllBanner = async (req, res) => {
+const getAllMenu = async (req, res) => {
     try {
         const { limit, page, sort, filter } = req.query
-        const response = await BannerService.getAllBanner(Number(limit) || null, Number(page) || 0, sort, filter)
+        const response = await MenuService.getAllMenu(Number(limit) || null, Number(page) || 0, sort, filter)
         return res.status(200).json(response)
     } catch (e) {
         return res.status(404).json({
@@ -104,10 +104,10 @@ const getAllBanner = async (req, res) => {
 }
 
 module.exports = {
-    createBanner,
-    updateBanner,
-    getDetailsBanner,
-    deleteBanner,
-    getAllBanner,
+    createMenu,
+    updateMenu,
+    getDetailsMenu,
+    deleteMenu,
+    getAllMenu,
     deleteMany
 };

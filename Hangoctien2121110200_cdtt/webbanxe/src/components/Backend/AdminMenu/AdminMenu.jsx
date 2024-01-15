@@ -1,27 +1,22 @@
 import { Button, Form, Select, Space } from "antd";
-import {
-  PlusOutlined,
-  DeleteOutlined,
-  EditOutlined,
-  SearchOutlined,
-} from "@ant-design/icons";
+import { SearchOutlined } from "@ant-design/icons";
 import React, { useRef } from "react";
 import { WrapperHeader, WrapperUploadFile } from "./style";
-import TableComponent from "../TableComponent/TableComponent";
+import TableComponent from "../../TableComponent/TableComponent";
 import { useState } from "react";
-import InputComponent from "../InputComponent/InputComponent";
-import { getBase64, renderOptions } from "../../utils";
-import * as BrandService from "../../services/BrandService";
-import { useMutationHooks } from "../../hooks/useMutationHook";
-import Loading from "../LoadingComponent/Loading";
+import InputComponent from "../../InputComponent/InputComponent";
+import { getBase64, renderOptions } from "../../../utils";
+import * as MenuService from "../../../services/MenuService";
+import { useMutationHooks } from "../../../hooks/useMutationHook";
+import Loading from "../../LoadingComponent/Loading";
 import { useEffect } from "react";
-import * as message from "../Message/Message";
+import * as message from "../../Message/Message";
 import { useQuery } from "@tanstack/react-query";
-import DrawerComponent from "../DrawerComponent/DrawerComponent";
+import DrawerComponent from "../../DrawerComponent/DrawerComponent";
 import { useSelector } from "react-redux";
-import ModalComponent from "../ModalComponent/ModalComponent";
+import ModalComponent from "../../ModalComponent/ModalComponent";
 
-const AdminBrand = () => {
+const AdminMenu = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [rowSelected, setRowSelected] = useState("");
   const [isOpenDrawer, setIsOpenDrawer] = useState(false);
@@ -31,11 +26,11 @@ const AdminBrand = () => {
   const searchInput = useRef(null);
   const inittial = () => ({
     name: "",
-    description: "",
-    logo: "",
+    position: "",
+    link: "",
   });
-  const [stateBrand, setStateBrand] = useState(inittial());
-  const [stateBrandDetails, setStateBrandDetails] = useState(inittial());
+  const [stateMenu, setStateMenu] = useState(inittial());
+  const [stateMenuDetails, setStateMenuDetails] = useState(inittial());
 
   const [form] = Form.useForm();
 
@@ -43,51 +38,48 @@ const AdminBrand = () => {
     const {
       name,
 
-      description,
-
-      logo,
+      link,
+      position,
     } = data;
-    const res = BrandService.createBrand({
+    const res = MenuService.createMenu({
       name,
 
-      description,
-
-      logo,
+      link,
+      position,
     });
     return res;
   });
   const mutationUpdate = useMutationHooks((data) => {
     const { id, token, ...rests } = data;
-    const res = BrandService.updateBrand(id, token, { ...rests });
+    const res = MenuService.updateMenu(id, token, { ...rests });
     return res;
   });
 
   const mutationDeleted = useMutationHooks((data) => {
     const { id, token } = data;
-    const res = BrandService.deleteBrand(id, token);
+    const res = MenuService.deleteMenu(id, token);
     return res;
   });
 
   const mutationDeletedMany = useMutationHooks((data) => {
     const { token, ...ids } = data;
-    const res = BrandService.deleteManyBrand(ids, token);
+    const res = MenuService.deleteManyMenu(ids, token);
     return res;
   });
 
-  const getAllBrands = async () => {
-    const res = await BrandService.getAllBrand();
+  const getAllMenus = async () => {
+    const res = await MenuService.getAllMenu();
     return res;
   };
 
-  const fetchGetDetailsBrands = async (rowSelected) => {
-    const res = await BrandService.getDetailsBrand(rowSelected);
+  const fetchGetDetailsMenu = async (rowSelected) => {
+    const res = await MenuService.getDetailsMenu(rowSelected);
     if (res?.data) {
-      setStateBrandDetails({
+      setStateMenuDetails({
         name: res?.data?.name,
 
-        description: res?.data?.description,
-
-        logo: res?.data?.logo,
+        link: res?.data?.link,
+        position: res?.data?.position,
       });
     }
     setIsLoadingUpdate(false);
@@ -95,29 +87,29 @@ const AdminBrand = () => {
 
   useEffect(() => {
     if (!isModalOpen) {
-      form.setFieldsValue(stateBrandDetails);
+      form.setFieldsValue(stateMenuDetails);
     } else {
       form.setFieldsValue(inittial());
     }
-  }, [form, stateBrandDetails, isModalOpen]);
+  }, [form, stateMenuDetails, isModalOpen]);
 
   useEffect(() => {
     if (rowSelected && isOpenDrawer) {
       setIsLoadingUpdate(true);
-      fetchGetDetailsBrands(rowSelected);
+      fetchGetDetailsMenu(rowSelected);
     }
   }, [rowSelected, isOpenDrawer]);
 
-  const handleDetailsBrands = () => {
+  const handleDetailsMenu = () => {
     setIsOpenDrawer(true);
   };
 
-  const handleDelteManyBrands = (ids) => {
+  const handleDelteManyMenus = (ids) => {
     mutationDeletedMany.mutate(
       { ids: ids, token: user?.access_token },
       {
         onSettled: () => {
-          queryBrand.refetch();
+          queryMenu.refetch();
         },
       }
     );
@@ -143,23 +135,21 @@ const AdminBrand = () => {
     isError: isErrorDeletedMany,
   } = mutationDeletedMany;
 
-  const queryBrand = useQuery({
-    queryKey: ["brands"],
-    queryFn: getAllBrands,
-  });
+  const queryMenu = useQuery({ queryKey: ["menus"], queryFn: getAllMenus });
 
-  const { isLoading: isLoadingBrands, data: brands } = queryBrand;
+  const { isLoading: isLoadingMenus, data: menus } = queryMenu;
   const renderAction = () => {
     return (
       <div>
-        <DeleteOutlined
-          style={{ color: "red", fontSize: "30px", cursor: "pointer" }}
+        <Button style={{ color: "orange" }} onClick={handleDetailsMenu}>
+          Edit
+        </Button>
+        <Button
+          style={{ color: "red" }}
           onClick={() => setIsModalOpenDelete(true)}
-        />
-        <EditOutlined
-          style={{ color: "orange", fontSize: "30px", cursor: "pointer" }}
-          onClick={handleDetailsBrands}
-        />
+        >
+          Delete
+        </Button>
       </div>
     );
   };
@@ -210,7 +200,7 @@ const AdminBrand = () => {
               width: 90,
             }}
           >
-            Search
+            Tìm kiếm
           </Button>
           <Button
             onClick={() => clearFilters && handleReset(clearFilters)}
@@ -219,7 +209,7 @@ const AdminBrand = () => {
               width: 90,
             }}
           >
-            Reset
+            Xóa
           </Button>
         </Space>
       </div>
@@ -256,22 +246,32 @@ const AdminBrand = () => {
 
   const columns = [
     {
-      title: "Name",
+      title: "Tên Menu",
       dataIndex: "name",
       sorter: (a, b) => a.name.length - b.name.length,
       ...getColumnSearchProps("name"),
     },
 
     {
-      title: "Action",
+      title: "Đường Dẫn",
+      dataIndex: "link",
+    },
+
+    {
+      title: "Mô tả",
+      dataIndex: "position",
+    },
+
+    {
+      title: "Chọn",
       dataIndex: "action",
       render: renderAction,
     },
   ];
   const dataTable =
-    brands?.data?.length &&
-    brands?.data?.map((brand) => {
-      return { ...brand, key: brand._id };
+    menus?.data?.length &&
+    menus?.data?.map((menu) => {
+      return { ...menu, key: menu._id };
     });
 
   useEffect(() => {
@@ -302,12 +302,11 @@ const AdminBrand = () => {
 
   const handleCloseDrawer = () => {
     setIsOpenDrawer(false);
-    setStateBrandDetails({
+    setStateMenuDetails({
       name: "",
 
-      description: "",
-
-      logo: "",
+      position: "",
+      link: "",
     });
     form.resetFields();
   };
@@ -325,12 +324,12 @@ const AdminBrand = () => {
     setIsModalOpenDelete(false);
   };
 
-  const handleDeleteBrand = () => {
+  const handleDeleteMenu = () => {
     mutationDeleted.mutate(
       { id: rowSelected, token: user?.access_token },
       {
         onSettled: () => {
-          queryBrand.refetch();
+          queryMenu.refetch();
         },
       }
     );
@@ -338,107 +337,89 @@ const AdminBrand = () => {
 
   const handleCancel = () => {
     setIsModalOpen(false);
-    setStateBrand({
+    setStateMenu({
       name: "",
 
-      description: "",
+      position: "",
 
-      logo: "",
+      link: "",
     });
     form.resetFields();
   };
 
   const onFinish = () => {
     const params = {
-      name: stateBrand.name,
+      name: stateMenu.name,
 
-      description: stateBrand.description,
+      position: stateMenu.position,
 
-      logo: stateBrand.logo,
+      link: stateMenu.link,
     };
     mutation.mutate(params, {
       onSettled: () => {
-        queryBrand.refetch();
+        queryMenu.refetch();
       },
     });
   };
 
   const handleOnchange = (e) => {
-    setStateBrand({
-      ...stateBrand,
+    setStateMenu({
+      ...stateMenu,
       [e.target.name]: e.target.value,
     });
   };
 
   const handleOnchangeDetails = (e) => {
-    setStateBrandDetails({
-      ...stateBrandDetails,
+    setStateMenuDetails({
+      ...stateMenuDetails,
       [e.target.name]: e.target.value,
     });
   };
 
-  const handleOnchangeAvatar = async ({ fileList }) => {
-    const file = fileList[0];
-    if (!file.url && !file.preview) {
-      file.preview = await getBase64(file.originFileObj);
-    }
-
-    setStateBrand({
-      ...stateBrand,
-      logo: file.preview,
+  const handleOnchangeLink = (e) => {
+    setStateMenu({
+      ...stateMenu,
+      [e.target.link]: e.target.value,
     });
   };
 
-  const handleOnchangeAvatarDetails = async ({ fileList }) => {
-    const file = fileList[0];
-    if (!file.url && !file.preview) {
-      file.preview = await getBase64(file.originFileObj);
-    }
-    setStateBrandDetails({
-      ...stateBrandDetails,
-      logo: file.preview,
+  const handleOnchangeLinkDetails = (e) => {
+    setStateMenuDetails({
+      ...stateMenuDetails,
+      [e.target.link]: e.target.value,
     });
   };
-
-  const onUpdateProduct = () => {
+  const onUpdateMenu = () => {
     mutationUpdate.mutate(
-      { id: rowSelected, token: user?.access_token, ...stateBrandDetails },
+      { id: rowSelected, token: user?.access_token, ...stateMenuDetails },
       {
         onSettled: () => {
-          queryBrand.refetch();
+          queryMenu.refetch();
         },
       }
     );
   };
 
-  const handleChangeSelect = (value) => {
-    setStateBrand({
-      ...stateBrand,
-      type: value,
-    });
-  };
-
-  return (
+  return (  
     <div>
-      <WrapperHeader>Quản lý Thương Hiệu</WrapperHeader>
+      <WrapperHeader>Quản lý Menu</WrapperHeader>
       <div style={{ marginTop: "10px" }}>
         <Button
           style={{
-            height: "150px",
-            width: "150px",
+            color: "#008000",
             borderRadius: "6px",
             borderStyle: "dashed",
           }}
           onClick={() => setIsModalOpen(true)}
         >
-          <PlusOutlined style={{ fontSize: "60px" }} />
+          Create{" "}
         </Button>
       </div>
       <div style={{ marginTop: "20px" }}>
         <TableComponent
-          handleDelteMany={handleDelteManyBrands}
+          handleDelteMany={handleDelteManyMenus}
           columns={columns}
-          isLoading={isLoadingBrands}
+          isLoading={isLoadingMenus}
           data={dataTable}
           onRow={(record, rowIndex) => {
             return {
@@ -451,7 +432,7 @@ const AdminBrand = () => {
       </div>
       <ModalComponent
         forceRender
-        title="Tạo Thương Hiệu"
+        title="Tạo Menu"
         open={isModalOpen}
         onCancel={handleCancel}
         footer={null}
@@ -466,69 +447,50 @@ const AdminBrand = () => {
             form={form}
           >
             <Form.Item
-              label="Name"
+              label="Tên Menu"
               name="name"
-              rules={[{ required: true, message: "Please input your name!" }]}
+              rules={[{ required: true, message: "Vui Lòng Nhập Tên Menu!" }]}
             >
               <InputComponent
-                value={stateBrand["name"]}
+                value={stateMenu["name"]}
                 onChange={handleOnchange}
                 name="name"
               />
             </Form.Item>
 
             <Form.Item
-              label="Description"
-              name="description"
-              rules={[
-                {
-                  required: true,
-                  message: "Please input your count description!",
-                },
-              ]}
+              label="Vị Trí"
+              name="position"
+              rules={[{ required: true, message: "Vui Lòng Nhập Vị Trí!" }]}
             >
               <InputComponent
-                value={stateBrand.description}
+                value={stateMenu.position}
                 onChange={handleOnchange}
-                name="description"
+                name="position"
               />
             </Form.Item>
 
             <Form.Item
-              label="Image"
-              name="image"
-              rules={[
-                { required: true, message: "Please input your count image!" },
-              ]}
+              label="Đường Dẫn"
+              name="link"
+              rules={[{ required: true, message: "Vui Lòng Nhập Đường Dẫn!" }]}
             >
-              <WrapperUploadFile onChange={handleOnchangeAvatar} maxCount={1}>
-                <Button>Select File</Button>
-                {stateBrand?.logo && (
-                  <img
-                    src={stateBrand?.logo}
-                    style={{
-                      height: "60px",
-                      width: "60px",
-                      borderRadius: "50%",
-                      objectFit: "cover",
-                      marginLeft: "10px",
-                    }}
-                    alt="avatar"
-                  />
-                )}
-              </WrapperUploadFile>
+              <InputComponent
+                value={stateMenu.link}
+                onChange={handleOnchange}
+                name="link"
+              />
             </Form.Item>
-
             <Form.Item wrapperCol={{ offset: 20, span: 16 }}>
               <Button type="primary" htmlType="submit">
-                Submit
+                Lưu
               </Button>
             </Form.Item>
           </Form>
         </Loading>
       </ModalComponent>
       <DrawerComponent
-        title="Chi tiết Thương Hiệu"
+        title="Chi tiết Menu"
         isOpen={isOpenDrawer}
         onClose={() => setIsOpenDrawer(false)}
         width="90%"
@@ -538,87 +500,66 @@ const AdminBrand = () => {
             name="basic"
             labelCol={{ span: 2 }}
             wrapperCol={{ span: 22 }}
-            onFinish={onUpdateProduct}
+            onFinish={onUpdateMenu}
             autoComplete="on"
             form={form}
           >
             <Form.Item
-              label="Name"
+              label="Tên Menu"
               name="name"
-              rules={[{ required: true, message: "Please input your name!" }]}
+              rules={[{ required: true, message: "Vui Lòng Nhập Tên Menu!" }]}
             >
               <InputComponent
-                value={stateBrandDetails["name"]}
+                value={stateMenuDetails["name"]}
                 onChange={handleOnchangeDetails}
                 name="name"
               />
             </Form.Item>
 
             <Form.Item
-              label="Description"
-              name="description"
-              rules={[
-                {
-                  required: true,
-                  message: "Please input your count description!",
-                },
-              ]}
+              label="Vị Trí"
+              name="position"
+              rules={[{ required: true, message: "Vui Lòng Nhập Vị Trí!" }]}
             >
               <InputComponent
-                value={stateBrandDetails.description}
+                value={stateMenuDetails.position}
                 onChange={handleOnchangeDetails}
-                name="description"
+                name="position"
               />
             </Form.Item>
 
             <Form.Item
-              label="Image"
-              name="image"
-              rules={[
-                { required: true, message: "Please input your count image!" },
-              ]}
+              label="Đường Dẫn"
+              name="Link"
+              rules={[{ required: true, message: "Vui Lòng Nhập Đường Dẫn!" }]}
             >
-              <WrapperUploadFile
-                onChange={handleOnchangeAvatarDetails}
-                maxCount={1}
-              >
-                <Button>Select File</Button>
-                {stateBrandDetails?.logo && (
-                  <img
-                    src={stateBrandDetails?.logo}
-                    style={{
-                      height: "60px",
-                      width: "60px",
-                      borderRadius: "50%",
-                      objectFit: "cover",
-                      marginLeft: "10px",
-                    }}
-                    alt="avatar"
-                  />
-                )}
-              </WrapperUploadFile>
+              <InputComponent
+                value={stateMenuDetails.link}
+                onChange={handleOnchangeDetails}
+                name="link"
+              />
             </Form.Item>
 
             <Form.Item wrapperCol={{ offset: 20, span: 16 }}>
               <Button type="primary" htmlType="submit">
-                Apply
+                Lưu
               </Button>
             </Form.Item>
           </Form>
         </Loading>
       </DrawerComponent>
       <ModalComponent
-        title="Xóa sản phẩm"
+        title="Xóa Menu"
         open={isModalOpenDelete}
         onCancel={handleCancelDelete}
-        onOk={handleDeleteBrand}
+        onOk={handleDeleteMenu}
       >
         <Loading isLoading={isLoadingDeleted}>
-          <div>Bạn có chắc xóa sản phẩm này không?</div>
+          <div>Bạn có chắc xóa Menu này không?</div>
         </Loading>
       </ModalComponent>
     </div>
   );
 };
 
-export default AdminBrand;
+export default AdminMenu;
