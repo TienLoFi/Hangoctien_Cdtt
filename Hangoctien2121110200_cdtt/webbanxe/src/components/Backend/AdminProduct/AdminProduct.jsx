@@ -7,20 +7,20 @@ import {
 } from "@ant-design/icons";
 import React, { useRef } from "react";
 import { WrapperHeader, WrapperUploadFile} from "./style";
-import TableComponent from "../TableComponent/TableComponent";
+import TableComponent from "../../TableComponent/TableComponent";
 import { useState } from "react";
-import InputComponent from "../InputComponent/InputComponent";
-import { getBase64, renderOptions,renderOptions2 } from "../../utils";
-import * as ProductService from "../../services/ProductService";
-import * as BrandService from "../../services/BrandService";
-import { useMutationHooks } from "../../hooks/useMutationHook";
-import Loading from "../../components/LoadingComponent/Loading";
+import InputComponent from "../../InputComponent/InputComponent";
+import { getBase64, renderOptions,renderOptions2 } from "../../../utils";
+import * as ProductService from "../../../services/ProductService";
+import * as BrandService from "../../../services/BrandService";
+import { useMutationHooks } from "../../../hooks/useMutationHook";
+import Loading from "../../LoadingComponent/Loading";
 import { useEffect } from "react";
-import * as message from "../../components/Message/Message";
+import * as message from "../../Message/Message";
 import { useQuery } from "@tanstack/react-query";
-import DrawerComponent from "../DrawerComponent/DrawerComponent";
+import DrawerComponent from "../../DrawerComponent/DrawerComponent";
 import { useSelector } from "react-redux";
-import ModalComponent from "../ModalComponent/ModalComponent";
+import ModalComponent from "../../ModalComponent/ModalComponent";
 
 const AdminProduct = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -1006,5 +1006,4 @@ const handleOnchangeAvatarsMultiple = async ({ fileList }) => {
     </div>
   );
 };
-
 export default AdminProduct;

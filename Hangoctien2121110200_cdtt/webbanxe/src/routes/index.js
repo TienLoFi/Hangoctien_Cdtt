@@ -12,6 +12,9 @@ import PaymentPage from "../pages/PaymentPage/PaymentPage";
 import TypeProductPage from "../pages/TypeProductPage/TypeProductPage";
 import OrderSucess from "../pages/OrderSuccess/OrderSuccess";
 import MyOrderPage from "../pages/MyOrder/MyOrder";
+import DetailsOrderPage from "../pages/DetailsOrderPage/DetailsOrderPage";
+import PostPage from "../pages/PostPage/PostPage";
+
 
 export const routes =[
     {
@@ -44,11 +47,11 @@ export const routes =[
         page: OrderSucess,
         isShowHeader: true
     },
-    // {
-    //     path: '/details-order',
-    //     page: DetailsOrderPage,
-    //     isShowHeader: true
-    // },
+    {
+        path: '/details-order',
+        page: DetailsOrderPage,
+        isShowHeader: true
+    },
     {
         path: '/my-order',
         page: MyOrderPage,
@@ -72,6 +75,11 @@ export const routes =[
     {
         path: '/payment',
         page: PaymentPage,
+        isShowHeader: true
+    },
+    {
+        path: '/post-details/:id',
+        page: PostPage,
         isShowHeader: true
     },
     {

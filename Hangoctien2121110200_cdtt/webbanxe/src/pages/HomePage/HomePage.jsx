@@ -18,27 +18,30 @@ import slider1 from "../../assets/images/sliders/banner1.jpg";
 import slider2 from "../../assets/images/sliders/banner2.jpg";
 import slider3 from "../../assets/images/sliders/banner3.jpg";
 
-import bigsale from "../../assets/images/Post/bigsale.jpg";
-import blackfriday from "../../assets/images/Post/blackfriday.jpg";
-import tangdichvu from "../../assets/images/Post/tangdichvu.jpg";
-
 import CardComponent from "../../components/CardComponent/CardComponent";
 import { useQuery } from "@tanstack/react-query";
 import * as ProductService from "../../services/ProductService";
+import * as PostService from "../../services/PostService";
 import { useSelector } from "react-redux";
 import { useState } from "react";
 import Loading from "../../components/LoadingComponent/Loading";
 import { useDebounce } from "../../hooks/useDebounce";
 import { useEffect } from "react";
 import Footer from "../Footer/Footer";
-
+import { useNavigate } from "react-router-dom";
+import * as SliderService from "../../services/SliderService";
 const HomePage = () => {
+  const navigate = useNavigate();
+  const handleDetailsPost = (id) => {
+    navigate(`/post-details/${id}`);
+  };
+
   const searchProduct = useSelector((state) => state?.product?.search);
   const searchDebounce = useDebounce(searchProduct, 500);
   const [loading, setLoading] = useState(false);
   const [limit, setLimit] = useState(18);
   const [typeProducts, setTypeProducts] = useState([]);
-
+  const [posts, setPosts] = useState([]);
   const fetchProductAll = async (context) => {
     const limit = context?.queryKey && context?.queryKey[1];
     const search = context?.queryKey && context?.queryKey[2];
@@ -46,7 +49,12 @@ const HomePage = () => {
 
     return res;
   };
-
+  const fetchPostAll = async () => {
+    const res = await PostService.getAllPost();
+    if (res?.status === "OK") {
+      setPosts(res?.data);
+    }
+  };
   const fetchAllTypeProduct = async () => {
     const res = await ProductService.getAllTypeProduct();
     if (res?.status === "OK") {
@@ -64,8 +72,19 @@ const HomePage = () => {
     keepPreviousData: true,
   });
 
+  const sliderSettings = {
+    dots: true,
+    infinite: true,
+    speed: 600,
+    slidesToShow: 1,
+    slidesToScroll: 1,
+    autoplay: true,
+    autoplaySpeed: 2000,
+  };
+  
   useEffect(() => {
     fetchAllTypeProduct();
+    fetchPostAll();
   }, []);
 
   return (
@@ -89,7 +108,7 @@ const HomePage = () => {
               id="container"
               style={{ height: "423px", width: "823px", paddingLeft: 70 }}
             >
-              <SliderComponent arrImages={[slider1, slider2, slider3]} />
+              <SliderComponent settings={sliderSettings} />
             </div>
           </SliderContainer>
 
@@ -97,46 +116,27 @@ const HomePage = () => {
             <TextContainer className="text-container">
               Chương Trình Khuyến Mãi
             </TextContainer>
-            <ImageRow>
-              <ImageContainer>
-                <img
-                  src={bigsale}
-                  alt="Image 1"
-                  style={{ width: 160, height: 90, borderRadius: 10 }}
-                />
-              </ImageContainer>
-              <Title> BIG SALE 12.12 CÙNG EXPRESS CENTER</Title>
-            </ImageRow>
-
-            <ImageRow>
-              <ImageContainer>
-                <img
-                  src={blackfriday}
-                  alt="Image 1"
-                  style={{ width: 160, height: 90, borderRadius: 10 }}
-                />
-              </ImageContainer>
-              <Title>     Siêu Sale Black Friday: MUA CÀNG NHIỀU, GIẢM CÀNG CHILL</Title>
-         
-            </ImageRow>
-
-            <ImageRow>
-              <ImageContainer>
-                <img
-                  src={tangdichvu}
-                  alt="Image 1"
-                  style={{ width: 160, height: 90, borderRadius: 10 }}
-                />
-              </ImageContainer>
-          <Title>  Thay nhớt tặng quà – Ưu đãi đặc biệt chỉ có tại EXPRESS CENTER</Title>
-            
-            </ImageRow>
+            {posts &&
+              posts.length > 0 &&
+              posts.slice(0, 3).map((post, index) => (
+                <ImageRow key={index}>
+                  <ImageContainer onClick={() => handleDetailsPost(post._id)}>
+                    <img
+                      src={post.image}
+                      alt={`Promotion Image ${index + 1}`}
+                      style={{ width: 160, height: 90, borderRadius: 10 }}
+                    />
+                  </ImageContainer>
+                  <Title>{post.title}</Title>
+                </ImageRow>
+              ))}
           </SaleContainer>
         </BodyContainer>
         <div
           id="container"
           style={{ height: "1000px", width: "1270px", margin: "0 auto" }}
         >
+          
           <WrapperProducts>
             {products?.data?.map(
               ({

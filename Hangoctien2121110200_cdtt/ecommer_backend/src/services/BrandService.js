@@ -24,7 +24,7 @@ const createBrand = (newBrand) => {
                 resolve({
                     status: 'OK',
                     message: 'SUCCESS',
-                    data: newBrandObject
+                    data: newBrand
                 });
             }
         } catch (e) {

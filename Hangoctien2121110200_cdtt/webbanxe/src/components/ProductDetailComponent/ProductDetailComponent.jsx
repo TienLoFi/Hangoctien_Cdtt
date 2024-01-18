@@ -35,6 +35,7 @@ import { useMutationHooks } from "../../hooks/useMutationHook";
 import * as UserService from "../../services/UserService";
 import { updateUser } from "../../redux/slides/userSlide";
 import CardComponent from "../CardComponent/CardComponent";
+import Footer from "../../pages/Footer/Footer";
 const ProductDetailComponent = ({ idProduct }) => {
   const [limit, setLimit] = useState(6);
   const [numProduct, setNumProduct] = useState(1);
@@ -44,7 +45,6 @@ const ProductDetailComponent = ({ idProduct }) => {
   const navigate = useNavigate();
   const location = useLocation();
   const dispatch = useDispatch();
-
 
   const onChange = (value) => {
     setNumProduct(Number(value));
@@ -118,7 +118,6 @@ const ProductDetailComponent = ({ idProduct }) => {
       return res.data;
     }
   };
-
 
   const fetchProductAll = async (context) => {
     const limit = context?.queryKey && context?.queryKey[1];
@@ -226,8 +225,7 @@ const ProductDetailComponent = ({ idProduct }) => {
     setMainImage(clickedImage);
     setSelectedThumbnailIndex(index);
   };
-  
-  
+
   useEffect(() => {
     if (productDetails?.imageDetail?.length > 0) {
       setMainImage(productDetails.image);
@@ -245,8 +243,17 @@ const ProductDetailComponent = ({ idProduct }) => {
           height: "100%",
         }}
       >
-        <Col span={10} style={{ borderRight: "1px solid #e5e5e5", paddingRight: "8px" }}>
-          <div style={{ display: "flex", alignItems: "center", justifyContent: "center" }}>
+        <Col
+          span={10}
+          style={{ borderRight: "1px solid #e5e5e5", paddingRight: "8px" }}
+        >
+          <div
+            style={{
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+            }}
+          >
             <Image
               src={mainImage}
               alt="image product"
@@ -259,7 +266,7 @@ const ProductDetailComponent = ({ idProduct }) => {
               }}
             />
           </div>
-          <Row style={{ paddingTop: '10px', justifyContent: 'center' }}>
+          <Row style={{ paddingTop: "10px", justifyContent: "center" }}>
             {thumbnailImages.map((image2, index) => (
               <WrapperStyleColImage key={index} span={4}>
                 <WrapperStyleImageSmall
@@ -268,19 +275,19 @@ const ProductDetailComponent = ({ idProduct }) => {
                   preview={false}
                   onClick={() => handleThumbnailClick(image2, index)}
                   style={{
-                    height: '73px',
-                    width: '73px',
-                    objectFit: 'contain',
-                    border: index === selectedThumbnailIndex ? '2px solid #00f' : 'none',
+                    height: "73px",
+                    width: "73px",
+                    objectFit: "contain",
+                    border:
+                      index === selectedThumbnailIndex
+                        ? "2px solid #00f"
+                        : "none",
                     opacity: index === selectedThumbnailIndex ? 1 : 0.5,
                   }}
                 />
               </WrapperStyleColImage>
             ))}
           </Row>
-  
-{/* Đặt đoạn kiểm tra nội dung ở đây
- {console.log('Image Details:', productDetails?.image)} */}
         </Col>
         <Col span={14} style={{ paddingLeft: "10px" }}>
           <WrapperStyleNameProduct>
@@ -415,7 +422,6 @@ const ProductDetailComponent = ({ idProduct }) => {
             dataHref={"https://developers.facebook.com/docs/plugins/"}
           /> */}
         </Col>
-      
       </Row>
       <div className="">
         <h3>
@@ -455,53 +461,44 @@ const ProductDetailComponent = ({ idProduct }) => {
         </WrapperProducts>
       </div>
 
-<div>
-<h3>
+      <div>
+        <h3>
           <b>Mô Tả</b>
         </h3>
 
-<h4>
-<p>{productDetails?.description}</p>
-
-</h4>
-<Image
-              src={productDetails?.image}
-              alt="image product"
-              preview={false}
-              style={{
-                width: "350px",
-                height: "250px",
-                objectFit: "contain",
-                borderRadius: "8px",
-              }}
-            />
-</div>
-
-
-
-
-
-
-
-
-
-
-
+        <h4>
+          <p>{productDetails?.description}</p>
+        </h4>
+        <Image
+          src={productDetails?.image}
+          alt="image product"
+          preview={false}
+          style={{
+            width: "350px",
+            height: "250px",
+            objectFit: "contain",
+            borderRadius: "8px",
+          }}
+        />
+      </div>
 
       {/* COMMENT */}
-        {<CommentComponent 
-                    dataHref={process.env.REACT_APP_IS_LOCAL 
-                        ? "https://developers.facebook.com/docs/plugins/comments#configurator"
-                        : window.location.href
-                    } 
-                    width="1270" 
-                /> }
+      {
         <CommentComponent
           dataHref={
-            "https://developers.facebook.com/docs/plugins/comments#configurator"
+            process.env.REACT_APP_IS_LOCAL
+              ? "https://developers.facebook.com/docs/plugins/comments#configurator"
+              : window.location.href
           }
           width="1270"
         />
+      }
+      <CommentComponent
+        dataHref={
+          "https://developers.facebook.com/docs/plugins/comments#configurator"
+        }
+        width="1270"
+      />
       <ModalComponent
         title="Cập nhật thông tin giao hàng"
         open={isOpenModalUpdateInfo}
@@ -567,6 +564,7 @@ const ProductDetailComponent = ({ idProduct }) => {
           </Form>
         </Loading>
       </ModalComponent>
+      <Footer />
     </Loading>
   );
 };

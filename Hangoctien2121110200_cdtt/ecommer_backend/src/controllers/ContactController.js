@@ -1,16 +1,16 @@
-const ProductService = require('../services/ProductService')
+const ContactService = require('../services/ContactService')
 
-const createProduct = async (req, res) => {
+const createContact = async (req, res) => {
     try {
-        const { name, image,imageDetail, type, countInStock, price, rating, description, discount } = req.body
-        if (!name || !image || !imageDetail|| !type || !countInStock || !price || !rating || !discount) {
+        const { title,email,phone,detail,name } = req.body
+        if (!name || !content || !email ||!phone||!detail ||! title ) {
             return res.status(200).json({
                 status: 'ERR',
                 message: 'The input is required'
             })
         }
-        const response = await ProductService.createProduct(req.body)
-        return res.status(201).json(response)
+        const response = await ContactService.createContact(req.body)
+        return res.status(200).json(response)
     } catch (e) {
         return res.status(404).json({
             message: e
@@ -18,17 +18,17 @@ const createProduct = async (req, res) => {
     }
 }
 
-const updateProduct = async (req, res) => {
+const updateContact = async (req, res) => {
     try {
-        const productId = req.params.id
+        const contactId = req.params.id
         const data = req.body
-        if (!productId) {
+        if (!contactId) {
             return res.status(200).json({
                 status: 'ERR',
-                message: 'The productId is required'
+                message: 'The contactId is required'
             })
         }
-        const response = await ProductService.updateProduct(productId, data)
+        const response = await ContactService.updateContact(contactId, data)
         return res.status(200).json(response)
     } catch (e) {
         return res.status(404).json({
@@ -37,16 +37,16 @@ const updateProduct = async (req, res) => {
     }
 }
 
-const getDetailsProduct = async (req, res) => {
+const getDetailsContact = async (req, res) => {
     try {
-        const productId = req.params.id
-        if (!productId) {
+        const contactId = req.params.id
+        if (!contactId) {
             return res.status(200).json({
                 status: 'ERR',
-                message: 'The productId is required'
+                message: 'The contactId is required'
             })
         }
-        const response = await ProductService.getDetailsProduct(productId)
+        const response = await ContactService.getDetailsContact(contactId)
         return res.status(200).json(response)
     } catch (e) {
         return res.status(404).json({
@@ -55,16 +55,16 @@ const getDetailsProduct = async (req, res) => {
     }
 }
 
-const deleteProduct = async (req, res) => {
+const deleteContact = async (req, res) => {
     try {
-        const productId = req.params.id
-        if (!productId) {
+        const contactId = req.params.id
+        if (!contactId) {
             return res.status(200).json({
                 status: 'ERR',
-                message: 'The productId is required'
+                message: 'The contactId is required'
             })
         }
-        const response = await ProductService.deleteProduct(productId)
+        const response = await ContactService.deleteContact(contactId)
         return res.status(200).json(response)
     } catch (e) {
         return res.status(404).json({
@@ -82,7 +82,7 @@ const deleteMany = async (req, res) => {
                 message: 'The ids is required'
             })
         }
-        const response = await ProductService.deleteManyProduct(ids)
+        const response = await ContactService.deleteManyContact(ids)
         return res.status(200).json(response)
     } catch (e) {
         return res.status(404).json({
@@ -91,10 +91,10 @@ const deleteMany = async (req, res) => {
     }
 }
 
-const getAllProduct = async (req, res) => {
+const getAllContact = async (req, res) => {
     try {
         const { limit, page, sort, filter } = req.query
-        const response = await ProductService.getAllProduct(Number(limit) || null, Number(page) || 0, sort, filter)
+        const response = await ContactService.getAllContact(Number(limit) || null, Number(page) || 0, sort, filter)
         return res.status(200).json(response)
     } catch (e) {
         return res.status(404).json({
@@ -105,7 +105,7 @@ const getAllProduct = async (req, res) => {
 
 const getAllType = async (req, res) => {
     try {
-        const response = await ProductService.getAllType()
+        const response = await ContactService.getAllType()
         return res.status(200).json(response)
     } catch (e) {
         return res.status(404).json({
@@ -115,11 +115,11 @@ const getAllType = async (req, res) => {
 }
 
 module.exports = {
-    createProduct,
-    updateProduct,
-    getDetailsProduct,
-    deleteProduct,
-    getAllProduct,
+    createContact,
+    updateContact,
+    getDetailsContact,
+    deleteContact,
+    getAllContact,
     deleteMany,
     getAllType
 }

@@ -6,44 +6,56 @@ const Footer = () => {
             <section className="clearfix footer__top" style={{ display: 'flex', justifyContent: 'space-between' }}>
                 <div className="footer__col">
                     <ul className="f-listmenu">
-                        <li><a href="/tin-tuc/tat-tan-tat-ve-chuong-trinh-uu-dai-app-qua-tang-vip-link-tai-va-cach-su-dung-1481677#gioithieu">Tích điểm Quà tặng VIP</a></li>
-                        <li><a href="/lich-su-mua-hang">Lịch sử mua hàng</a></li>
-                        <li><a href="/tra-gop">Tìm hiểu về mua trả góp</a></li>
+                    <li><a style={{ fontSize: '1rem', fontStyle: 'italic',color:'#757575' }} href="">Trung Tâm Trợ Giúp</a></li>
+                        <li><a style={{ fontSize: '1rem', fontStyle: 'italic',color:'#757575' }} href="/lich-su-mua-hang">Shop SnowNghi Blog</a></li>
+                        <li><a style={{ fontSize: '1rem', fontStyle: 'italic',color:'#757575' }} href="/tra-gop">Hướng Dẫn Mua Hàng</a></li>
+                        <li><a style={{ fontSize: '1rem', fontStyle: 'italic',color:'#757575' }} href="/tra-gop">Hướng Dẫn Bán Hàng</a></li>
+                        <li><a style={{ fontSize: '1rem', fontStyle: 'italic',color:'#757575' }} href="/tra-gop">Thanh toán</a></li>
+                        <li><a style={{ fontSize: '1rem', fontStyle: 'italic',color:'#757575' }} href="/tra-gop">SnowNghi Xu</a></li>
+                        <li><a style={{ fontSize: '1rem', fontStyle: 'italic',color:'#757575' }} href="/tra-gop">Vận chuyển</a></li>
+                        <li><a style={{ fontSize: '1rem', fontStyle: 'italic',color:'#757575' }} href="/tra-gop">Chăm sóc khách hàng</a></li>
                         {/* ... (add other list items) */}
                     </ul>
                 </div>
                 <div className="footer__col">
                     <ul className="f-listmenu">
-                        <li><a href="https://mwg.vn">Giới thiệu công ty</a></li>
-                        <li><a href="https://vieclam.thegioididong.com">Tuyển dụng</a></li>
-                        <li><a href="/lien-he">Gửi góp ý, khiếu nại</a></li>
+                    <li><a style={{ fontSize: '1rem', fontStyle: 'italic',color:'#757575' }} href="/tra-gop">Trả hàng và Hoàn tiền</a></li>
+                        <li><a style={{ fontSize: '1rem', fontStyle: 'italic',color:'#757575' }} href="/tra-gop">Chính sách bảo mật</a></li>
+                        <li><a style={{ fontSize: '1rem', fontStyle: 'italic',color:'#757575' }} href="/tra-gop">Chính hãng</a></li>
+                        <li><a style={{ fontSize: '1rem', fontStyle: 'italic',color:'#757575' }} href="/tra-gop">Ưu đãi</a></li>
+                        <li><a style={{ fontSize: '1rem', fontStyle: 'italic',color:'#757575' }} href="/tra-gop">Kênh người bán</a></li>
+                        <li><a style={{ fontSize: '1rem', fontStyle: 'italic',color:'#757575' }} href="https://mwg.vn">Giới thiệu công ty</a></li>
+                        <li><a style={{ fontSize: '1rem', fontStyle: 'italic',color:'#757575' }} href="https://vieclam.thegioididong.com">Tuyển dụng</a></li>
+                        <li><a style={{ fontSize: '1rem', fontStyle: 'italic',color:'#757575' }} href="/lien-he">Gửi góp ý, khiếu nại</a></li>
                         {/* ... (add other list items) */}
                     </ul>
                 </div>
                 <div className="footer__col">
                     <ul className="f-listmenu">
-                        <li><a href="https://mwg.vn">Tìm siêu thị (3.301 shop)</a></li>
-                        <li><a href="https://vieclam.thegioididong.com">Chính sách đổi trả</a></li>
-                        <li><a href="/lien-he">In hóa đơn điện tử</a></li>
+                        <li><a style={{ fontSize: '1rem', fontStyle: 'italic',color:'#757575' }} href="https://mwg.vn">Tìm siêu thị (3.301 shop)</a></li>
+                        <li><a style={{ fontSize: '1rem', fontStyle: 'italic',color:'#757575' }} href="https://vieclam.thegioididong.com">Chính sách đổi trả</a></li>
+                        <li><a style={{ fontSize: '1rem', fontStyle: 'italic',color:'#757575' }} href="/lien-he">In hóa đơn điện tử</a></li>
                         {/* ... (add other list items) */}
                     </ul>
                 </div>
                 <div className="footer__col">
                     <ul className="f-listmenu">
-                        <li><a href="https://mwg.vn">Tổng đài hỗ trợ (Miễn phí gọi)</a></li>
-                        <li><a href="https://vieclam.thegioididong.com">Khiếu nại: 1800.1062 (8:00 - 21:30)</a></li>
-                        <li><a href="/lien-he">Bảo hành: 1800.1064 (8:00 - 21:00)</a></li>
+                        <li><a style={{ fontSize: '1rem', fontStyle: 'italic',color:'#757575' }} href="https://mwg.vn">Tổng đài hỗ trợ (Miễn phí gọi)</a></li>
+                        <li><a style={{ fontSize: '1rem', fontStyle: 'italic',color:'#757575' }} href="https://vieclam.thegioididong.com">Khiếu nại: 1800.1062 (8:00 - 21:30)</a></li>
+                        <li><a style={{ fontSize: '1rem', fontStyle: 'italic',color:'#757575' }} href="/lien-he">Bảo hành: 1800.1064 (8:00 - 21:00)</a></li>
                         {/* ... (add other list items) */}
                     </ul>
                 </div>
                 {/* ... (add other columns) */}
             </section>
-            <div className="copyright" style={{ marginTop: '20px' }}>
+            <div className="copyright" style={{ marginTop: '10px' , textAlign:'center', alignItems:'center', display:'flex', justifyContent:'center'}}>
                 <section>
-                    <p>
-                        © 2018. Công ty cổ phần Ptech. GPDKKD: 0303217354 do sở KH & ĐT TP.HCM cấp ngày 02/01/2007. GPMXH: 238/GP-BTTTT do Bộ Thông Tin và Truyền Thông cấp ngày 04/06/2020.
-                        <br />
-                        Địa chỉ: 128 Trần Quang Khải, P.Tân Định, Q.1, TP.Hồ Chí Minh. Địa chỉ liên hệ và gửi chứng từ: Lô T2-1.2, Đường D1, Đ. D1, P.Tân Phú, TP.Thủ Đức, TP.Hồ Chí Minh. Điện thoại: 028 38125960. Email: cskh@thegioididong.com. Chịu trách nhiệm nội dung: Huỳnh Văn Tốt. Email: Tot.huynhvan@thegioididong.com.
+                    <p >
+                    Địa chỉ: Tầng 4-5-6, Tòa nhà Capital Place, số 29 đường Liễu Giai, Phường Ngọc Khánh, Quận Ba Đình, Thành phố Hà Nội, Việt Nam.<br/>
+                     Tổng đài hỗ trợ: 19001221 - Email: cskh@hotro.shopee.vn<br/>
+                    Chịu Trách Nhiệm Quản Lý Nội Dung: Nguyễn Đức Trí - Điện thoại liên hệ: 024 73081221 (ext 4678)<br/>
+                            Mã số doanh nghiệp: 0106773786 do Sở Kế hoạch & Đầu tư TP Hà Nội cấp lần đầu ngày 10/02/2015
+                                            © 2015 - Bản quyền thuộc về Công ty TNHH Shopee     <br />
                         <a href="/thoa-thuan-su-dung-trang-mxh">Xem chính sách sử dụng</a>
                     </p>
                 </section>

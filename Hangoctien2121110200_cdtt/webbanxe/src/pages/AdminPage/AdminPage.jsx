@@ -5,17 +5,19 @@ import { UserOutlined, AppstoreOutlined, ShoppingCartOutlined ,MailOutlined,Star
 
 
 import HeaderComponent from '../../components/HeaderComponent/HeaderComponent';
-import AdminUser from '../../components/AdminUser/AdminUser';
-import AdminProduct from '../../components/AdminProduct/AdminProduct';
-import OrderAdmin from '../../components/OrderAdmin/OrderAdmin';
+import AdminUser from '../../components/Backend/AdminUser/AdminUser';
+import AdminProduct from '../../components/Backend/AdminProduct/AdminProduct';
+// import OrderAdmin from '../../components/Backend/OrderAdmin/OrderAdmin';
 import AdminBrand from '../../components/Backend/AdminBrand/AdminBrand';
 import AdminMenu from '../../components/Backend/AdminMenu/AdminMenu';
 import AdminSlider from '../../components/Backend/AdminSlider/AdminSlider';
 import AdminPost from '../../components/Backend/AdminPost/AdminPost';
 import AdminCategory from '../../components/Backend/AdminCategory/AdminCategory';
+import AdminTopic from '../../components/Backend/AdminTopic/AdminTopic';
+import AdminContact from '../../components/Backend/AdminContact/AdminContact';
 
 //service
-import * as OrderService from '../../services/OrderService'
+// import * as OrderService from '../../services/OrderService'
 import * as ProductService from '../../services/ProductService'
 import * as UserService from '../../services/UserService'
 import * as BrandService from '../../services/BrandService'
@@ -23,6 +25,8 @@ import * as SliderService from '../../services/SliderService'
 import * as PostService from '../../services/PostService'
 import * as MenuService from '../../services/MenuService'
 import * as CategoryService from '../../services/CategoryService'
+import * as TopicService from '../../services/TopicService'
+import * as ContactService from '../../services/ContactService'
 
 import CustomizedContent from './components/CustomizedContent';
 import { useSelector } from 'react-redux';
@@ -44,15 +48,17 @@ const AdminPage = () => {
     getItem('Quản Lí Bài Viết', 'posts', <MailOutlined  />),
     getItem('Quản Lí Banner', 'banners', <MailOutlined  />),
     getItem('Quản Lí Menu', 'menus', <MailOutlined  />),
+    getItem('Quản Lí Chủ Đề', 'topics', <MailOutlined  />),
+    getItem('Quản Lí Liên Hệ', 'contacts', <MailOutlined  />),
   
   ];
 
 
   const [keySelected, setKeySelected] = useState('');
-  const getAllOrder = async () => {
-    const res = await OrderService.getAllOrder(user?.access_token)
-    return {data: res?.data, key: 'orders'}
-  }
+  // const getAllOrder = async () => {
+  //   const res = await OrderService.getAllOrder(user?.access_token)
+  //   return {data: res?.data, key: 'orders'}
+  // }
 
   const getAllProducts = async () => {
     const res = await ProductService.getAllProduct()
@@ -90,6 +96,18 @@ const AdminPage = () => {
     return {data: res?.data, key: 'categories'}
   }
 
+  const getAllTopic = async () => {
+    const res = await TopicService.getAllTopic
+    console.log('res', res)
+    return {data: res?.data, key: 'topics'}
+  }
+
+  const getAllContact = async () => {
+    const res = await ContactService.getAllContact
+    console.log('res', res)
+    return {data: res?.data, key: 'contacts'}
+  }
+
 
 
   const queries = useQueries({
@@ -99,9 +117,11 @@ const AdminPage = () => {
       {queryKey: ['brands'], queryFn: getAllBrands, staleTime: 1000 * 60},
       {queryKey: ['sliders'], queryFn: getAllSlider, staleTime: 1000 * 60},
       {queryKey: ['posts'], queryFn: getAllPost, staleTime: 1000 * 60}, 
-      {queryKey: ['orders'], queryFn: getAllOrder, staleTime: 1000 * 60},
+      // {queryKey: ['orders'], queryFn: getAllOrder, staleTime: 1000 * 60},
       {queryKey: ['menus'], queryFn: getAllMenu, staleTime: 1000 * 60},
       {queryKey: ['categories'], queryFn: getAllCategory, staleTime: 1000 * 60},
+      {queryKey: ['topics'], queryFn: getAllTopic, staleTime: 1000 * 60},
+      {queryKey: ['contacts'], queryFn: getAllContact, staleTime: 1000 * 60},
     ]
   })
   const memoCount = useMemo(() => {
@@ -133,10 +153,10 @@ const AdminPage = () => {
         return (
           <AdminProduct />
         )
-      case 'orders':
-        return (
-          <OrderAdmin />
-        )
+        // case 'orders':
+        //   return (
+        //     <OrderAdmin />
+        //   )
         case 'brands':
           return (
             <AdminBrand />
@@ -157,6 +177,14 @@ const AdminPage = () => {
                 return (
                   <AdminCategory/>
                 )
+                case 'topics':
+                  return (
+                    <AdminTopic/>
+                  )
+                  case 'contacts':
+                    return (
+                      <AdminContact/>
+                    )
       default:
         return <></>
     }

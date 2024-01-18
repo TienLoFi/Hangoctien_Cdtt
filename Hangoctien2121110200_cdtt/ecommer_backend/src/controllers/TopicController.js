@@ -1,16 +1,16 @@
-const ProductService = require('../services/ProductService')
+const TopicService = require('../services/TopicService')
 
-const createProduct = async (req, res) => {
+const createTopic = async (req, res) => {
     try {
-        const { name, image,imageDetail, type, countInStock, price, rating, description, discount } = req.body
-        if (!name || !image || !imageDetail|| !type || !countInStock || !price || !rating || !discount) {
+        const { title,content } = req.body
+        if (!title || !content  ) {
             return res.status(200).json({
                 status: 'ERR',
                 message: 'The input is required'
             })
         }
-        const response = await ProductService.createProduct(req.body)
-        return res.status(201).json(response)
+        const response = await TopicService.createTopic(req.body)
+        return res.status(200).json(response)
     } catch (e) {
         return res.status(404).json({
             message: e
@@ -18,17 +18,17 @@ const createProduct = async (req, res) => {
     }
 }
 
-const updateProduct = async (req, res) => {
+const updateTopic = async (req, res) => {
     try {
-        const productId = req.params.id
+        const topicId = req.params.id
         const data = req.body
-        if (!productId) {
+        if (!topicId) {
             return res.status(200).json({
                 status: 'ERR',
-                message: 'The productId is required'
+                message: 'The topicId is required'
             })
         }
-        const response = await ProductService.updateProduct(productId, data)
+        const response = await TopicService.updateTopic(topicId, data)
         return res.status(200).json(response)
     } catch (e) {
         return res.status(404).json({
@@ -37,16 +37,16 @@ const updateProduct = async (req, res) => {
     }
 }
 
-const getDetailsProduct = async (req, res) => {
+const getDetailsTopic = async (req, res) => {
     try {
-        const productId = req.params.id
-        if (!productId) {
+        const topicId = req.params.id
+        if (!topicId) {
             return res.status(200).json({
                 status: 'ERR',
-                message: 'The productId is required'
+                message: 'The topicId is required'
             })
         }
-        const response = await ProductService.getDetailsProduct(productId)
+        const response = await TopicService.getDetailsTopic(topicId)
         return res.status(200).json(response)
     } catch (e) {
         return res.status(404).json({
@@ -55,16 +55,16 @@ const getDetailsProduct = async (req, res) => {
     }
 }
 
-const deleteProduct = async (req, res) => {
+const deleteTopic = async (req, res) => {
     try {
-        const productId = req.params.id
-        if (!productId) {
+        const topicId = req.params.id
+        if (!topicId) {
             return res.status(200).json({
                 status: 'ERR',
-                message: 'The productId is required'
+                message: 'The topicId is required'
             })
         }
-        const response = await ProductService.deleteProduct(productId)
+        const response = await TopicService.deleteTopic(topicId)
         return res.status(200).json(response)
     } catch (e) {
         return res.status(404).json({
@@ -82,7 +82,7 @@ const deleteMany = async (req, res) => {
                 message: 'The ids is required'
             })
         }
-        const response = await ProductService.deleteManyProduct(ids)
+        const response = await TopicService.deleteManyTopic(ids)
         return res.status(200).json(response)
     } catch (e) {
         return res.status(404).json({
@@ -91,10 +91,10 @@ const deleteMany = async (req, res) => {
     }
 }
 
-const getAllProduct = async (req, res) => {
+const getAllTopic = async (req, res) => {
     try {
         const { limit, page, sort, filter } = req.query
-        const response = await ProductService.getAllProduct(Number(limit) || null, Number(page) || 0, sort, filter)
+        const response = await TopicService.getAllTopic(Number(limit) || null, Number(page) || 0, sort, filter)
         return res.status(200).json(response)
     } catch (e) {
         return res.status(404).json({
@@ -105,7 +105,7 @@ const getAllProduct = async (req, res) => {
 
 const getAllType = async (req, res) => {
     try {
-        const response = await ProductService.getAllType()
+        const response = await TopicService.getAllType()
         return res.status(200).json(response)
     } catch (e) {
         return res.status(404).json({
@@ -115,11 +115,11 @@ const getAllType = async (req, res) => {
 }
 
 module.exports = {
-    createProduct,
-    updateProduct,
-    getDetailsProduct,
-    deleteProduct,
-    getAllProduct,
+    createTopic,
+    updateTopic,
+    getDetailsTopic,
+    deleteTopic,
+    getAllTopic,
     deleteMany,
     getAllType
 }

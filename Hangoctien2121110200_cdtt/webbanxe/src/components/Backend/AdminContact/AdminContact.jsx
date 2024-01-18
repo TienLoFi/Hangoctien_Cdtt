@@ -1,3 +1,4 @@
+
 import { Button, Form, Select, Space } from 'antd'
 import { SearchOutlined } from '@ant-design/icons'
 import React, { useRef } from 'react'
@@ -6,7 +7,7 @@ import TableComponent from '../../TableComponent/TableComponent'
 import { useState } from 'react'
 import InputComponent from '../../InputComponent/InputComponent'
 import { getBase64, renderOptions } from '../../../utils'
-import * as PostService from '../../../services/PostService'
+import * as ContactService from '../../../services/ContactService'
 import { useMutationHooks } from '../../../hooks/useMutationHook'
 import Loading from '../../LoadingComponent/Loading'
 import { useEffect } from 'react'
@@ -16,7 +17,7 @@ import DrawerComponent from '../../DrawerComponent/DrawerComponent'
 import { useSelector } from 'react-redux'
 import ModalComponent from '../../ModalComponent/ModalComponent'
 
-const AdminPost = () => {
+const AdminContact = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [rowSelected, setRowSelected] = useState('')
   const [isOpenDrawer, setIsOpenDrawer] = useState(false)
@@ -25,37 +26,38 @@ const AdminPost = () => {
   const user = useSelector((state) => state?.user)
   const searchInput = useRef(null);
   const inittial = () => ({
-    name: '',
     title: '',
-    slug: '',
     detail: '',
-    description: '',
-    image: '',
-    type: '',
-    newType: '',
+    email: '',
+    phone: '',
+    name: '',
+
+ 
   })
-  const [statePost, setStatePost] = useState(inittial())
-  const [statePostDetails, setStatePostDetails] = useState(inittial())
+  const [stateContact, setStateContact] = useState(inittial())
+  const [stateContactDetails, setStateContactDetails] = useState(inittial())
 
   const [form] = Form.useForm();
 
   const mutation = useMutationHooks(
     (data) => {
-      const { name,
-        title,
-        slug,
+      const {  title,
         detail,
-        image,
-        description,
-        type } = data
-      const res = PostService.createPost({
+        email,
         name,
+        phone,
+
+
+    } = data
+      const res = ContactService.createContact({
         title,
-        slug,
         detail,
-        image,
-        description,
-        type
+        email,
+        name,
+        phone,
+
+    
+     
       })
       return res
     }
@@ -65,7 +67,7 @@ const AdminPost = () => {
       const { id,
         token,
         ...rests } = data
-      const res = PostService.updatePost(
+      const res = ContactService.updateContact(
         id,
         token,
         { ...rests })
@@ -78,7 +80,7 @@ const AdminPost = () => {
       const { id,
         token,
       } = data
-      const res = PostService.deletePost(
+      const res = ContactService.deleteContact(
         id,
         token)
       return res
@@ -89,29 +91,28 @@ const AdminPost = () => {
     (data) => {
       const { token, ...ids
       } = data
-      const res = PostService.deleteManyPost(
+      const res = ContactService.deleteManyContact(
         ids,
         token)
       return res
     },
   )
 
-  const getAllPosts = async () => {
-    const res = await PostService.getAllPost()
+  const getAllContacts = async () => {
+    const res = await ContactService.getAllContact()
     return res
   }
 
-  const fetchGetDetailsPost = async (rowSelected) => {
-    const res = await PostService.getDetailsPost(rowSelected)
+  const fetchGetDetailsContact = async (rowSelected) => {
+    const res = await ContactService.getDetailsContact(rowSelected)
     if (res?.data) {
-      setStatePostDetails({
-        name : res?.data?.name,
-        title : res?.data?.title,
-        slug : res?.data?.slug ,
-        detail : res?.data?.detail ,
-        image : res?.data?.image ,
-        description : res?.data?.description,
-        type : res?.data?.type
+      setStateContactDetails({
+        title: res?.data?.title,
+        phone: res?.data?.phone,
+        name: res?.data?.name,
+        email: res?.data?.email,
+        detail: res?.data?.detail,
+       
       })
     }
     setIsLoadingUpdate(false)
@@ -119,35 +120,32 @@ const AdminPost = () => {
 
   useEffect(() => {
     if(!isModalOpen) {
-      form.setFieldsValue(statePostDetails)
+      form.setFieldsValue(stateContactDetails)
     }else {
       form.setFieldsValue(inittial())
     }
-  }, [form, statePostDetails, isModalOpen])
+  }, [form, stateContactDetails, isModalOpen])
 
   useEffect(() => {
     if (rowSelected && isOpenDrawer) {
       setIsLoadingUpdate(true)
-      fetchGetDetailsPost(rowSelected)
+      fetchGetDetailsContact(rowSelected)
     }
   }, [rowSelected, isOpenDrawer])
 
-  const handleDetailsPost = () => {
+  const handleDetailsContact = () => {
     setIsOpenDrawer(true)
   }
 
-  const handleDelteManyPosts = (ids) => {
+  const handleDelteManyContacts = (ids) => {
     mutationDeletedMany.mutate({ ids: ids, token: user?.access_token }, {
       onSettled: () => {
-        queryPost.refetch()
+        queryContact.refetch()
       }
     })
   }
 
-  const fetchAllTypePost = async () => {
-    const res = await PostService.getAllTypePost()
-    return res
-  }
+
 
   const { data, isLoading, isSuccess, isError } = mutation
   const { data: dataUpdated, isLoading: isLoadingUpdated, isSuccess: isSuccessUpdated, isError: isErrorUpdated } = mutationUpdate
@@ -155,13 +153,12 @@ const AdminPost = () => {
   const { data: dataDeletedMany, isLoading: isLoadingDeletedMany, isSuccess: isSuccessDelectedMany, isError: isErrorDeletedMany } = mutationDeletedMany
 
 
-  const queryPost = useQuery({ queryKey: ['posts'], queryFn: getAllPosts })
-  const typePost = useQuery({ queryKey: ['type-post'], queryFn: fetchAllTypePost })
-  const { isLoading: isLoadingPosts, data: posts } = queryPost
+  const queryContact = useQuery({ queryKey: ['categories'], queryFn: getAllContacts })
+  const { isLoading: isLoadingContacts, data: categories } = queryContact
   const renderAction = () => {
     return (
       <div>
-        <Button style={{ color:'orange'}} onClick={handleDetailsPost}>Edit</Button>
+        <Button style={{ color:'orange'}} onClick={handleDetailsContact}>Edit</Button>
         <Button style={{ color:'red'}} onClick={() => setIsModalOpenDelete(true)}>Delete</Button>
       </div>
     )
@@ -207,7 +204,7 @@ const AdminPost = () => {
               width: 90,
             }}
           >
-            Tìm kiếm
+            Search
           </Button>
           <Button
             onClick={() => clearFilters && handleReset(clearFilters)}
@@ -216,7 +213,7 @@ const AdminPost = () => {
               width: 90,
             }}
           >
-            Xóa
+            Reset
           </Button>
         </Space>
       </div>
@@ -254,43 +251,36 @@ const AdminPost = () => {
 
   const columns = [
     {
-      title: 'Tên',
+      title: 'Tên Liên Hệ ',
       dataIndex: 'name',
-      sorter: (a, b) => a.name.length - b.name.length,
+      sorter: (a, b) => a.title.length - b.title.length,
       ...getColumnSearchProps('name')
     },
+    
     {
-        title: 'Title',
+      title: 'email',
+      dataIndex: 'email',
+    },
+    {
+        title: 'Số Điện Thoại',
+        dataIndex: 'phone',
+      },
+  
+    {
+        title: 'Tiêu Đề',
         dataIndex: 'title',
+      },
   
-    },
-    {
-        title: 'Chi tiết',
+      {
+        title: 'Chi Tiết',
         dataIndex: 'detail',
+      },
   
-    },
+    
+  
 
-    {
-      title: 'Mô tả',
-      dataIndex: 'description',
-    },
-    {
-      title: 'Hình ảnh',
-    dataIndex: 'image',
-    render: (image) => (
-      <img
-        src={image}
-        style={{
-          height: '60px',
-          width: '60px',
-          borderRadius: '50%',
-          objectFit: 'cover',
-        }}
-        alt="Hình ảnh"
-      />
-    ),
 
-    },
+
 
     {
       title: 'Chọn',
@@ -298,8 +288,8 @@ const AdminPost = () => {
       render: renderAction
     },
   ];
-  const dataTable = posts?.data?.length && posts?.data?.map((post) => {
-    return { ...post, key: post._id }
+  const dataTable = categories?.data?.length && categories?.data?.map((contact) => {
+    return { ...contact, key: contact._id }
   })
 
   useEffect(() => {
@@ -330,14 +320,14 @@ const AdminPost = () => {
 
   const handleCloseDrawer = () => {
     setIsOpenDrawer(false);
-    setStatePostDetails({
-      name: '',
-      title: '',
-      description: '',
-      slug: '',
-      image: '',
-      type: '',
-      detail: ''
+    setStateContactDetails({
+        title: '',
+        detail: '',
+        email: '',
+        phone: '',
+        name: '',
+    
+  
     })
     form.resetFields()
   };
@@ -356,103 +346,77 @@ const AdminPost = () => {
   }
 
 
-  const handleDeletePost = () => {
+  const handleDeleteContact = () => {
     mutationDeleted.mutate({ id: rowSelected, token: user?.access_token }, {
       onSettled: () => {
-        queryPost.refetch()
+        queryContact.refetch()
       }
     })
   }
 
   const handleCancel = () => {
     setIsModalOpen(false);
-    setStatePost({
-        name: '',
+    setStateContact({
         title: '',
-        description: '',
-        slug: '',
-        image: '',
-        type: '',
-        detail: ''
+        detail: '',
+        email: '',
+        phone: '',
+        name: '',
+    
+  
     })
     form.resetFields()
   };
 
   const onFinish = () => {
     const params = {
-      name: statePost.name,
-      title: statePost.title,
-      slug: statePost.slug,
-      description: statePost.description,
-      detail: statePost.detail,
-      image: statePost.image,
-      type: statePost.type === 'add_type' ? statePost.newType : statePost.type,
+      title: stateContact.title,
+   
+      content: stateContact.content,
+ 
+      
     }
     mutation.mutate(params, {
       onSettled: () => {
-        queryPost.refetch()
+        queryContact.refetch()
       }
     })
   }
 
   const handleOnchange = (e) => {
-    setStatePost({
-      ...statePost,
+    setStateContact({
+      ...stateContact,
       [e.target.name]: e.target.value
     })
   }
 
   const handleOnchangeDetails = (e) => {
-    setStatePostDetails({
-      ...statePostDetails,
+    setStateContactDetails({
+      ...stateContactDetails,
       [e.target.name]: e.target.value
     })
   }
 
-  const handleOnchangeAvatar = async ({ fileList }) => {
-    const file = fileList[0]
-    if (!file.url && !file.preview) {
-      file.preview = await getBase64(file.originFileObj);
-    }
-    setStatePost({
-      ...statePost,
-      image: file.preview
-    })
-  }
 
-  const handleOnchangeAvatarDetails = async ({ fileList }) => {
-    const file = fileList[0]
-    if (!file.url && !file.preview) {
-      file.preview = await getBase64(file.originFileObj);
-    }
-    setStatePostDetails({
-      ...statePostDetails,
-      image: file.preview
-    })
-  }
-  const onUpdatePost = () => {
-    mutationUpdate.mutate({ id: rowSelected, token: user?.access_token, ...statePostDetails }, {
+
+
+  const onUpdateContact = () => {
+    mutationUpdate.mutate({ id: rowSelected, token: user?.access_token, ...stateContactDetails }, {
       onSettled: () => {
-        queryPost.refetch()
+        queryContact.refetch()
       }
     })
   }
 
-  const handleChangeSelect = (value) => {
-      setStatePost({
-        ...statePost,
-        type: value
-      })
-  }
 
   return (
     <div>
-      <WrapperHeader>Quản lý bài đăng</WrapperHeader>
+      <WrapperHeader>Quản lý Liên Hệ</WrapperHeader>
       <div style={{ marginTop: '10px' }}>
         <Button style={{ color:'#008000', borderRadius: '6px', borderStyle: 'dashed' }} onClick={() => setIsModalOpen(true)}>Create </Button>
       </div>
       <div style={{ marginTop: '20px' }}>
-        <TableComponent handleDelteMany={handleDelteManyPosts} columns={columns} isLoading={isLoadingPosts} data={dataTable} onRow={(record, rowIndex) => {
+        <TableComponent handleDelteMany={handleDelteManyContacts} columns={columns} isLoading={isLoadingContacts} data={dataTable} onRow={(record, rowIndex) => {
           return {
             onClick: event => {
               setRowSelected(record._id)
@@ -460,11 +424,11 @@ const AdminPost = () => {
           };
         }} />
       </div>
-      <ModalComponent forceRender title="Tạo bài đăng" open={isModalOpen} onCancel={handleCancel} footer={null}>
+      <ModalComponent forceRender title="Tạo Liên Hệ" open={isModalOpen} onCancel={handleCancel} footer={null}>
         <Loading isLoading={isLoading}>
 
           <Form
-            name="basic"
+            title="basic"
             labelCol={{ span: 6 }}
             wrapperCol={{ span: 18 }}
             onFinish={onFinish}
@@ -472,82 +436,41 @@ const AdminPost = () => {
             form={form}
           >
             <Form.Item
-              label="Tên bài đăng"
-              name="name"
+              label="Tên Liên Hệ"
+              title="name"
               rules={[{ required: true, message: 'Please input your name!' }]}
             >
-              <InputComponent value={statePost['name']} onChange={handleOnchange} name="name" />
-            </Form.Item>
-
-            <Form.Item
-              label="Loại bài đăng "
-              name="type"
-              rules={[{ required: true, message: 'Please input your type!' }]}
-            >
-              <Select
-                name="type"
-                // defaultValue="lucy"
-                // style={{ width: 120 }}
-                value={statePost.type}
-                onChange={handleChangeSelect}
-                options={renderOptions(typePost?.data?.data)}
-                />
-            </Form.Item>
-            {statePost.type === 'add_type' && (
-              <Form.Item
-                label='Loại bài đăng mới'
-                name="newType"
-                rules={[{ required: true, message: 'Please input your type!' }]}
-              >
-                <InputComponent value={statePost.newType} onChange={handleOnchange} name="newType" />
-              </Form.Item>
-            )}
-            <Form.Item
-              label="Title"
-              name="title"
-              rules={[{ required: true, message: 'Please input your count title!' }]}
-            >
-              <InputComponent value={statePost.title} onChange={handleOnchange} name="title" />
+              <InputComponent value={stateContact['name']} onChange={handleOnchange} name="name" />
             </Form.Item>
             <Form.Item
-              label="Slug"
-              name="slug"
-              rules={[{ required: true, message: 'Please input your count slug!' }]}
+              label="Email"
+              title="email"
+              rules={[{ required: true, message: 'Please input your email!' }]}
             >
-              <InputComponent value={statePost.slug} onChange={handleOnchange} name="slug" />
+              <InputComponent value={stateContact['email']} onChange={handleOnchange} name="email" />
             </Form.Item>
             <Form.Item
-              label="Mô tả"
-              name="description"
-              rules={[{ required: true, message: 'Please input your count description!' }]}
+              label="Số Điện Thoại"
+              title="phone"
+              rules={[{ required: true, message: 'Please input your phone!' }]}
             >
-              <InputComponent value={statePost.description} onChange={handleOnchange} name="description" />
+              <InputComponent value={stateContact['phone']} onChange={handleOnchange} name="phone" />
+            </Form.Item>
+            <Form.Item
+              label="Tên Tiêu Đề "
+              title="title"
+              rules={[{ required: true, message: 'Please input your title!' }]}
+            >
+              <InputComponent value={stateContact['title']} onChange={handleOnchange} name="title" />
             </Form.Item>
             <Form.Item
               label="Chi tiết"
-              name="detail"
+              title="detail"
               rules={[{ required: true, message: 'Please input your count detail!' }]}
             >
-              <InputComponent value={statePost.detail} onChange={handleOnchange} name="detail" />
+              <InputComponent value={stateContact.detail} onChange={handleOnchange} name="detail" />
             </Form.Item>
-            <Form.Item
-              label="Hình ảnh"
-              name="image"
-              rules={[{ required: true, message: 'Please input your count image!' }]}
-            >
-              <WrapperUploadFile onChange={handleOnchangeAvatar} maxCount={1}>
-                <Button >Chọn ảnh</Button>
-                {statePost?.image && (
-                  <img src={statePost?.image} style={{
-                    height: '60px',
-                    width: '60px',
-                    borderRadius: '50%',
-                    objectFit: 'cover',
-                    marginLeft: '10px'
-                  }} alt="hình post" />
-                )}
-              </WrapperUploadFile>
-            </Form.Item>
+          
             <Form.Item wrapperCol={{ offset: 20, span: 16 }}>
               <Button type="primary" htmlType="submit">
                 Lưu
@@ -556,71 +479,53 @@ const AdminPost = () => {
           </Form>
         </Loading>
       </ModalComponent>
-      <DrawerComponent title='Chi tiết bài đăng' isOpen={isOpenDrawer} onClose={() => setIsOpenDrawer(false)} width="90%">
+      <DrawerComponent title='Chi tiết Liên Hệ' isOpen={isOpenDrawer} onClose={() => setIsOpenDrawer(false)} width="90%">
         <Loading isLoading={isLoadingUpdate || isLoadingUpdated}>
 
           <Form
-            name="basic"
+            title="basic"
             labelCol={{ span: 2 }}
             wrapperCol={{ span: 22 }}
-            onFinish={onUpdatePost}
+            onFinish={onUpdateContact}
             autoComplete="on"
             form={form}
           >
-            <Form.Item
-              label="Tên bài đăng "
-              name="name"
+               <Form.Item
+              label="Tên Liên Hệ"
+              title="name"
               rules={[{ required: true, message: 'Please input your name!' }]}
             >
-              <InputComponent value={statePostDetails['name']} onChange={handleOnchangeDetails} name="name" />
-            </Form.Item>
-
-            <Form.Item
-              label="Loại bài đăng"
-              name="type"
-              rules={[{ required: true, message: 'Please input your type!' }]}
-            >
-              <InputComponent value={statePostDetails['type']} onChange={handleOnchangeDetails} name="type" />
+              <InputComponent value={stateContact['name']} onChange={handleOnchangeDetails} title="name" />
             </Form.Item>
             <Form.Item
-              label="Mô tả"
-              name="description"
-              rules={[{ required: true, message: 'Please input your count description!' }]}
+              label="Email"
+              title="email"
+              rules={[{ required: true, message: 'Please input your email!' }]}
             >
-              <InputComponent value={statePost.description} onChange={handleOnchangeDetails} name="description" />
+              <InputComponent value={stateContact['email']} onChange={handleOnchangeDetails} name="email" />
+            </Form.Item>
+            <Form.Item
+              label="Số Điện Thoại"
+              title="phone"
+              rules={[{ required: true, message: 'Please input your phone!' }]}
+            >
+              <InputComponent value={stateContact['phone']} onChange={handleOnchangeDetails} name="phone" />
+            </Form.Item>
+            <Form.Item
+              label="Tên Tiêu Đề "
+              title="title"
+              rules={[{ required: true, message: 'Please input your title!' }]}
+            >
+              <InputComponent value={stateContact['title']} onChange={handleOnchangeDetails} name="title" />
             </Form.Item>
             <Form.Item
               label="Chi tiết"
-              name="detail"
+              title="detail"
               rules={[{ required: true, message: 'Please input your count detail!' }]}
             >
-              <InputComponent value={statePostDetails.detail} onChange={handleOnchangeDetails} name="detail" />
+              <InputComponent value={stateContact.detail} onChange={handleOnchangeDetails} name="detail" />
             </Form.Item>
-            <Form.Item
-              label="Title"
-              name="title"
-              rules={[{ required: true, message: 'Please input your title of post!' }]}
-            >
-              <InputComponent value={statePostDetails.title} onChange={handleOnchangeDetails} name="title" />
-            </Form.Item>
-            <Form.Item
-              label="Hình ảnh"
-              name="image"
-              rules={[{ required: true, message: 'Please input your count image!' }]}
-            >
-              <WrapperUploadFile onChange={handleOnchangeAvatarDetails} maxCount={1}>
-                <Button >Chọn ảnh</Button>
-                {statePostDetails?.image && (
-                  <img src={statePostDetails?.image} style={{
-                    height: '60px',
-                    width: '60px',
-                    borderRadius: '50%',
-                    objectFit: 'cover',
-                    marginLeft: '10px'
-                  }} alt="avatar" />
-                )}
-              </WrapperUploadFile>
-            </Form.Item>
+  
             <Form.Item wrapperCol={{ offset: 20, span: 16 }}>
               <Button type="primary" htmlType="submit">
                 Lưu
@@ -629,13 +534,13 @@ const AdminPost = () => {
           </Form>
         </Loading>
       </DrawerComponent>
-      <ModalComponent title="Xóa bài đăng" open={isModalOpenDelete} onCancel={handleCancelDelete} onOk={handleDeletePost}>
+      <ModalComponent title="Xóa Liên Hệ" open={isModalOpenDelete} onCancel={handleCancelDelete} onOk={handleDeleteContact}>
         <Loading isLoading={isLoadingDeleted}>
-          <div>Bạn có chắc xóa bài đăng này không?</div>
+          <div>Bạn có chắc xóa Liên Hệ này không?</div>
         </Loading>
       </ModalComponent>
     </div>
   )
 }
 
-export default AdminPost
+export default AdminContact
