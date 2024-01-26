@@ -16,4 +16,5 @@
 ### Tuần 7 ( 1/1/20224 Đến 7/1/2024 Push): Thêm Một Số Chức Năng Cho Sản Phẩm
 ### Tuần 8 ( 8/1/20224 Đến 14/1/2024 Push): Thêm Phần Thanh Toán Bằng Paypal cho dự án Và Thêm Bảng cho Phần Backend
 ### Tuần 9 ( 15/1/20224 Đến 21/1/2024 Push): Thêm một số chức năng vào trang người dùng ( sửa thông tin người dùng...) +chỉnh sửa lại giao diện 
+### Tuần 10 ( 22/1/20224 Đến 26/1/2024 Push): Fix Lỗi Và Hoàn Thành Các Chức Năng và Giao Diện Của Dự Án 
 
