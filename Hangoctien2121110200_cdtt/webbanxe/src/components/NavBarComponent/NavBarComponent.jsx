@@ -1,4 +1,4 @@
-/* eslint-disable-next-line no-unused-vars */
+
 import { Checkbox, Col, Rate, Row } from "antd";
 import React, { useEffect, useState } from "react";
 import * as ProductService from "../../services/ProductService";
@@ -10,9 +10,22 @@ import {
   WrapperTextValue,
 } from "./style";
 import TypeProduct from "../TypeProduct/TypeProduct";
+import BrandProduct from "../BrandProduct/BrandProduct";
 
 const NavBarComponent = () => {
+  const [Brands, setBrands] = useState([]);
   const [typeProducts, setTypeProducts] = useState([]);
+  const fetchAllBrands = async () => {
+    try {
+      const res = await ProductService.getAllBrandProduct();
+      if (res?.status === "OK") {
+        setBrands(res?.data);
+      }
+    } catch (error) {
+      console.error("Không tìm thấy thương hiệu:", error);
+    }
+  };
+
 
   const fetchAllTypeProduct = async () => {
     try {
@@ -27,25 +40,10 @@ const NavBarComponent = () => {
 
   useEffect(() => {
     fetchAllTypeProduct();
-  }, []);
-
-  const [Brands, setBrands] = useState([]);
-
-  const fetchAllBrands = async () => {
-    try {
-      const res = await BrandService.getAllBrand();
-      if (res?.status === "OK") {
-        setBrands(res?.data);
-      }
-    } catch (error) {
-      console.error("Không tìm thấy thương hiệu:", error);
-    }
-  };
-
-  useEffect(() => {
-    fetchAllTypeProduct();
     fetchAllBrands();
   }, []);
+
+
 
   return (
     <div>
@@ -61,9 +59,9 @@ const NavBarComponent = () => {
         <WrapperLableText>Thương Hiệu</WrapperLableText>
 
         {Brands.map((item) => (
-          <div key={item._id}>
+          <div key={item}>
             <WrapperContent>
-              <TypeProduct name={item.name} />
+              <BrandProduct name={item} />
             </WrapperContent>
           </div>
         ))}

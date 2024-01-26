@@ -92,7 +92,7 @@ const PostDetailsComponent = ({ idPost }) => {
         <SaleContainer>   
           {posts &&
             posts.length > 0 &&
-            posts.slice(0, 3).map((post, index) => (
+            posts.slice(0, 6).map((post, index) => (
               <ImageRow key={index}>
                 <ImageContainer onClick={() => handleDetailsPost(post._id)}>
                   <img

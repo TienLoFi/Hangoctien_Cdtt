@@ -6,9 +6,10 @@ export const WrapperCardStyle = styled(Card)`
     & img {
         height: 200px;
         width: 200px;
+        
     },
     position: relative;
-    background-color: ${props => props.disabled ? '#ccc' : '#fff'};
+    background-color: ${props => props.disabled ? '#ccc' : '#red'};
     cursor: ${props => props.disabled ? 'not-allowed' : 'pointer'};
     &:hover {
         background-color: ${props => (props.disabled ? '#ccc' : '#ddd')};
@@ -41,8 +42,12 @@ export const WrapperPriceText = styled.div`
 
 export const WrapperDiscountText = styled.span`
     color: rgb(255, 66, 78);
-    font-size: 12px;
-    font-weight: 500;
+    font-size: 13px;
+    font-weight: 600;
+    position: absolute;
+    top: 0;
+    right: 0;
+    background-color: yellow
 `
 
 export const WrapperStyleTextSell = styled.span`

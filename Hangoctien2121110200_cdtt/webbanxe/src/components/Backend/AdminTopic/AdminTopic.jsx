@@ -1,5 +1,7 @@
 import { Button, Form, Select, Space } from 'antd'
-import { SearchOutlined } from '@ant-design/icons'
+import { SearchOutlined ,  PlusOutlined,
+  DeleteOutlined,
+  EditOutlined,} from '@ant-design/icons'
 import React, { useRef } from 'react'
 import { WrapperHeader, WrapperUploadFile } from './style'
 import TableComponent from '../../TableComponent/TableComponent'
@@ -142,9 +144,16 @@ const AdminTopic = () => {
   const { isLoading: isLoadingTopics, data: categories } = queryTopic
   const renderAction = () => {
     return (
-      <div>
-        <Button style={{ color:'orange'}} onClick={handleDetailsTopic}>Edit</Button>
-        <Button style={{ color:'red'}} onClick={() => setIsModalOpenDelete(true)}>Delete</Button>
+
+        <div>
+        <DeleteOutlined
+          style={{ color: "red", fontSize: "30px", cursor: "pointer" }}
+          onClick={() => setIsModalOpenDelete(true)}
+        />
+        <EditOutlined
+          style={{ color: "orange", fontSize: "30px", cursor: "pointer" }}
+          onClick={handleDetailsTopic}
+        />
       </div>
     )
   }
@@ -378,7 +387,17 @@ const AdminTopic = () => {
     <div>
       <WrapperHeader>Quản lý Chủ Đề</WrapperHeader>
       <div style={{ marginTop: '10px' }}>
-        <Button style={{ color:'#008000', borderRadius: '6px', borderStyle: 'dashed' }} onClick={() => setIsModalOpen(true)}>Create </Button>
+      <Button
+          style={{
+            height: "150px",
+            width: "150px",
+            borderRadius: "6px",
+            borderStyle: "dashed",
+          }}
+          onClick={() => setIsModalOpen(true)}
+        >
+          <PlusOutlined style={{ fontSize: "60px" }} />
+        </Button>
       </div>
       <div style={{ marginTop: '20px' }}>
         <TableComponent handleDelteMany={handleDelteManyTopics} columns={columns} isLoading={isLoadingTopics} data={dataTable} onRow={(record, rowIndex) => {

@@ -210,12 +210,13 @@ const AdminUser = () => {
 
   const columns = [
     {
-      title: "Image",
-      dataIndex: "image",
-      render: (avatar, record) => <img src={user.avatar} alt={user.name} style={{ maxWidth: "100px", maxHeight: "100px" }} />,
+      title: "Hình Đại Diện",
+      dataIndex: "avatar",
+      render: (avatar, record) => <img src={avatar} alt="Không Có hình" style={{ maxWidth: "150px", maxHeight: "150px", borderRadius: "50%", objectFit: "contain" }}
+      />,
     },
     {
-      title: 'Name',
+      title: 'Tên User',
       dataIndex: 'name',
       sorter: (a, b) => a.name.length - b.name.length,
       ...getColumnSearchProps('name')
@@ -227,7 +228,7 @@ const AdminUser = () => {
       ...getColumnSearchProps('email')
     },
     {
-      title: 'Address',
+      title: 'Địa Chỉ',
       dataIndex: 'address',
       sorter: (a, b) => a.address.length - b.address.length,
       ...getColumnSearchProps('address')
@@ -247,13 +248,13 @@ const AdminUser = () => {
       ],
     },
     {
-      title: 'Phone',
+      title: 'Điện Thoại',
       dataIndex: 'phone',
       sorter: (a, b) => a.phone - b.phone,
       ...getColumnSearchProps('phone')
     },
     {
-      title: 'Action',
+      title: 'Hành Động',
       dataIndex: 'action',
       render: renderAction
     },
@@ -360,7 +361,7 @@ const AdminUser = () => {
             form={form}
           >
             <Form.Item
-              label="Name"
+              label="Tên User"
               name="name"
               rules={[{ required: true, message: 'Please input your name!' }]}
             >
@@ -375,7 +376,7 @@ const AdminUser = () => {
               <InputComponent value={stateUserDetails['email']} onChange={handleOnchangeDetails} name="email" />
             </Form.Item>
             <Form.Item
-              label="Phone"
+              label="Điện Thoại"
               name="phone"
               rules={[{ required: true, message: 'Please input your  phone!' }]}
             >
@@ -383,13 +384,19 @@ const AdminUser = () => {
             </Form.Item>
 
             <Form.Item
-              label="Adress"
+              label="Địa Chỉ"
               name="address"
               rules={[{ required: true, message: 'Please input your  address!' }]}
             >
               <InputComponent value={stateUserDetails.address} onChange={handleOnchangeDetails} name="address" />
             </Form.Item>
-
+            <Form.Item
+              label="Quyền"
+              name="isAdmin"
+              rules={[{ required: true, message: 'Please input your  isAdmin!' }]}
+            >
+              <InputComponent value={stateUserDetails.isAdmin} onChange={handleOnchangeDetails} name="isAdmin" />
+            </Form.Item>
             <Form.Item
               label="Avatar"
               name="avatar"
@@ -410,7 +417,7 @@ const AdminUser = () => {
             </Form.Item>
             <Form.Item wrapperCol={{ offset: 20, span: 16 }}>
               <Button type="primary" htmlType="submit">
-                Apply
+              Cập Nhật
               </Button>
             </Form.Item>
           </Form>

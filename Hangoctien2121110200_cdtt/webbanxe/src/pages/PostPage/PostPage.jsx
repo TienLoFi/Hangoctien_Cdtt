@@ -8,7 +8,7 @@ const ProductDetailsPage = () => {
   return (
     <div style={{width: '100%',background: '#efefef', height: '100%'}}>
       <div style={{ width: '1270px', height: '100%', margin: '0 auto'}} >
-        <h5><span style={{cursor: 'pointer', fontWeight: 'bold',fontSize:16}} onClick={() => {navigate('/')}}>Trang chủ</span> - Chi tiết Bài Viết</h5>
+        <h5><span style={{cursor: 'pointer', fontWeight: 'bold',fontSize:16}} onClick={() => {navigate('/')}}>Trang chủ</span> - Chi Tiết Bài Viết</h5>
         <PostDetailComponent idPost={id} />
       </div>
     </div>

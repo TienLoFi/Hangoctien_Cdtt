@@ -563,8 +563,9 @@ const ProductDetailComponent = ({ idProduct }) => {
             </Form.Item>
           </Form>
         </Loading>
+        
       </ModalComponent>
-      <Footer />
+  
     </Loading>
   );
 };

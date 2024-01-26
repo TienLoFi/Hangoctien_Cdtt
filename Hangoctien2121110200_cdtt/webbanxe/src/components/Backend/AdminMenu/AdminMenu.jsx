@@ -1,5 +1,7 @@
 import { Button, Form, Select, Space } from "antd";
-import { SearchOutlined } from "@ant-design/icons";
+import { SearchOutlined ,  PlusOutlined,
+  DeleteOutlined,
+  EditOutlined,} from "@ant-design/icons";
 import React, { useRef } from "react";
 import { WrapperHeader, WrapperUploadFile } from "./style";
 import TableComponent from "../../TableComponent/TableComponent";
@@ -140,17 +142,17 @@ const AdminMenu = () => {
   const { isLoading: isLoadingMenus, data: menus } = queryMenu;
   const renderAction = () => {
     return (
-      <div>
-        <Button style={{ color: "orange" }} onClick={handleDetailsMenu}>
-          Edit
-        </Button>
-        <Button
-          style={{ color: "red" }}
-          onClick={() => setIsModalOpenDelete(true)}
-        >
-          Delete
-        </Button>
-      </div>
+   
+         <div>
+         <DeleteOutlined
+           style={{ color: "red", fontSize: "30px", cursor: "pointer" }}
+           onClick={() => setIsModalOpenDelete(true)}
+         />
+         <EditOutlined
+           style={{ color: "orange", fontSize: "30px", cursor: "pointer" }}
+           onClick={handleDetailsMenu}
+         />
+       </div>
     );
   };
 
@@ -404,15 +406,16 @@ const AdminMenu = () => {
     <div>
       <WrapperHeader>Quản lý Menu</WrapperHeader>
       <div style={{ marginTop: "10px" }}>
-        <Button
+      <Button
           style={{
-            color: "#008000",
+            height: "150px",
+            width: "150px",
             borderRadius: "6px",
             borderStyle: "dashed",
           }}
           onClick={() => setIsModalOpen(true)}
         >
-          Create{" "}
+          <PlusOutlined style={{ fontSize: "60px" }} />
         </Button>
       </div>
       <div style={{ marginTop: "20px" }}>

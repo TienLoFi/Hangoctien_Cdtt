@@ -2,38 +2,42 @@ const ProductService = require('../services/ProductService')
 
 const createProduct = async (req, res) => {
     try {
-        const { name, image,imageDetail, type, countInStock, price, rating, description, discount } = req.body
-        if (!name || !image || !imageDetail|| !type || !countInStock || !price || !rating || !discount) {
+        const { name, image, imageDetail, type, countInStock, price, rating, description, discount, brand } = req.body;
+
+        if (!name || !image || !imageDetail || !type || !countInStock || !price || !rating || !discount || !brand) {
             return res.status(200).json({
                 status: 'ERR',
-                message: 'The input is required'
-            })
+                message: 'All input fields are required, including brand information'
+            });
         }
-        const response = await ProductService.createProduct(req.body)
-        return res.status(201).json(response)
+
+        const response = await ProductService.createProduct(req.body);
+        return res.status(201).json(response);
     } catch (e) {
         return res.status(404).json({
-            message: e
-        })
+            message: e.message || 'An error occurred while processing the request'
+        });
     }
 }
 
 const updateProduct = async (req, res) => {
     try {
-        const productId = req.params.id
-        const data = req.body
-        if (!productId) {
+        const productId = req.params.id;
+        const data = req.body;
+
+        if (!productId || !data.brand) {
             return res.status(200).json({
                 status: 'ERR',
-                message: 'The productId is required'
-            })
+                message: 'Both productId and brand information are required'
+            });
         }
-        const response = await ProductService.updateProduct(productId, data)
-        return res.status(200).json(response)
+
+        const response = await ProductService.updateProduct(productId, data);
+        return res.status(200).json(response);
     } catch (e) {
         return res.status(404).json({
-            message: e
-        })
+            message: e.message || 'An error occurred while processing the request'
+        });
     }
 }
 
@@ -113,6 +117,16 @@ const getAllType = async (req, res) => {
         })
     }
 }
+const getAllBrand = async (req, res) => {
+    try {
+        const response = await ProductService.getAllBrand()
+        return res.status(200).json(response)
+    } catch (e) {
+        return res.status(404).json({
+            message: e
+        })
+    }
+}
 
 module.exports = {
     createProduct,
@@ -121,5 +135,6 @@ module.exports = {
     deleteProduct,
     getAllProduct,
     deleteMany,
-    getAllType
+    getAllType,
+    getAllBrand
 }

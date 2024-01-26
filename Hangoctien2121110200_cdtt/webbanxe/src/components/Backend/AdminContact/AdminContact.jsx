@@ -1,6 +1,7 @@
 
 import { Button, Form, Select, Space } from 'antd'
-import { SearchOutlined } from '@ant-design/icons'
+import { SearchOutlined ,PlusOutlined,  DeleteOutlined,
+  EditOutlined,} from '@ant-design/icons'
 import React, { useRef } from 'react'
 import { WrapperHeader, WrapperUploadFile } from './style'
 import TableComponent from '../../TableComponent/TableComponent'
@@ -157,10 +158,14 @@ const AdminContact = () => {
   const { isLoading: isLoadingContacts, data: categories } = queryContact
   const renderAction = () => {
     return (
-      <div>
-        <Button style={{ color:'orange'}} onClick={handleDetailsContact}>Edit</Button>
-        <Button style={{ color:'red'}} onClick={() => setIsModalOpenDelete(true)}>Delete</Button>
-      </div>
+
+       <div>
+       <DeleteOutlined
+         style={{ color: "red", fontSize: "30px", cursor: "pointer" }}
+         onClick={() => setIsModalOpenDelete(true)}
+       />
+   
+     </div>
     )
   }
 
@@ -412,10 +417,9 @@ const AdminContact = () => {
   return (
     <div>
       <WrapperHeader>Quản lý Liên Hệ</WrapperHeader>
-      <div style={{ marginTop: '10px' }}>
-        <Button style={{ color:'#008000', borderRadius: '6px', borderStyle: 'dashed' }} onClick={() => setIsModalOpen(true)}>Create </Button>
-      </div>
-      <div style={{ marginTop: '20px' }}>
+      <div style={{ marginTop: '10px',textAlign:'center' }}>
+    
+      
         <TableComponent handleDelteMany={handleDelteManyContacts} columns={columns} isLoading={isLoadingContacts} data={dataTable} onRow={(record, rowIndex) => {
           return {
             onClick: event => {

@@ -10,10 +10,12 @@ import SignUpPage from "../pages/SignUpPage/SignUpPage";
 import PaymentPage from "../pages/PaymentPage/PaymentPage";
 
 import TypeProductPage from "../pages/TypeProductPage/TypeProductPage";
+import BrandProductPage from "../pages/BrandProductPage/BrandProductPage";
 import OrderSucess from "../pages/OrderSuccess/OrderSuccess";
 import MyOrderPage from "../pages/MyOrder/MyOrder";
 import DetailsOrderPage from "../pages/DetailsOrderPage/DetailsOrderPage";
 import PostPage from "../pages/PostPage/PostPage";
+import ContactPage from "../pages/ContactPage/ContactPage";
 
 
 export const routes =[
@@ -32,9 +34,24 @@ export const routes =[
         page:ProductPage,
         isShowHeader: true
     },
+      {
+        path: '/product/:type',
+        page:TypeProductPage,
+        isShowHeader: true
+    },
+    {
+        path: '/product/:brand',
+        page:BrandProductPage,
+        isShowHeader: true
+    },
     {
         path: '/product/:type',
         page:TypeProductPage,
+        isShowHeader: true
+    },
+    {
+        path: '/product/:brand',
+        page:BrandProductPage,
         isShowHeader: true
     },
     {
@@ -45,10 +62,10 @@ export const routes =[
     {
         path: '/orderSuccess',
         page: OrderSucess,
-        isShowHeader: true
+        isShowHeader: true  
     },
     {
-        path: '/details-order',
+        path: '/details-order/:id',
         page: DetailsOrderPage,
         isShowHeader: true
     },
@@ -80,6 +97,11 @@ export const routes =[
     {
         path: '/post-details/:id',
         page: PostPage,
+        isShowHeader: true
+    },
+    {
+        path: '/contact',
+        page: ContactPage,
         isShowHeader: true
     },
     {

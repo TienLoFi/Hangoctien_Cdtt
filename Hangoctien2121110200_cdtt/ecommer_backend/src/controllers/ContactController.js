@@ -3,7 +3,7 @@ const ContactService = require('../services/ContactService')
 const createContact = async (req, res) => {
     try {
         const { title,email,phone,detail,name } = req.body
-        if (!name || !content || !email ||!phone||!detail ||! title ) {
+        if (!name || !email ||!phone||!detail ||! title ) {
             return res.status(200).json({
                 status: 'ERR',
                 message: 'The input is required'

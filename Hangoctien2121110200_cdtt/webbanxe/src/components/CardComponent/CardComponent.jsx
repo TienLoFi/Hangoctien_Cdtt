@@ -3,7 +3,7 @@ import { StarFilled } from '@ant-design/icons';
 import { useNavigate } from 'react-router-dom';
 import { convertPrice } from '../../utils';
 import { WrapperCardStyle, StyleNameProduct, WrapperReportText, WrapperPriceText, WrapperDiscountText, WrapperStyleTextSell } from './style';
-import logo from '../../assets/images/logo.png';
+
 
 const CardComponent = (props) => {
   const { id, image, name, price, rating, selled, discount } = props;
@@ -17,23 +17,12 @@ const CardComponent = (props) => {
     <WrapperCardStyle
       hoverable
       headStyle={{ width: '100%', height: '200px', overflow: 'hidden' }}
-      style={{ width: 200, borderRadius: '8px', overflow: 'hidden', boxShadow: '0 4px 8px rgba(0, 0, 0, 0.1)' }}
+      style={{ width: 200, borderRadius: '8px', overflow: 'hidden', boxShadow: '0 4px 8px rgba(0, 0, 0, 0.2)' }}
       bodyStyle={{ padding: '10px' }}
       cover={<img alt="example" src={image} style={{ width: '100%', height: '100%', objectFit: 'contain', borderRadius: '8px', maxWidth: '200px', maxHeight: '200px'  }} />}
       onClick={handleDetailsProduct}
     >
-      <img
-        src={logo}
-        alt="logo"
-        style={{
-          width: '68px',
-          height: '14px',
-          position: 'absolute',
-          top: '10px',
-          left: '10px',
-          borderTopLeftRadius: '3px',
-        }}
-      />
+     
       <StyleNameProduct>{name}</StyleNameProduct>
       <WrapperReportText>
         <span style={{ marginRight: '4px', display: 'flex', alignItems: 'center' }}>
@@ -43,7 +32,9 @@ const CardComponent = (props) => {
       </WrapperReportText>
       <WrapperPriceText>
         <span style={{ marginRight: '8px', fontSize: '14px', fontWeight: 'bold', color: 'rgb(255, 66, 78)' }}>{convertPrice(price)}</span>
-        <WrapperDiscountText style={{ fontSize: '12px', fontWeight: 'bold', color: 'rgb(255, 66, 78)' }}>- {discount || 5} %</WrapperDiscountText>
+        <WrapperDiscountText style={{ fontSize: '12px', fontWeight: 'bold', color: 'rgb(255, 66, 78)' }}>
+  {discount ? `- ${discount} %` : ''}
+</WrapperDiscountText>
       </WrapperPriceText>
     </WrapperCardStyle>
   );

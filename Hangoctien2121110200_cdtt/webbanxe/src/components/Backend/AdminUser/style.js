@@ -6,6 +6,7 @@ export const WrapperHeader = styled.h1`
     font-size: 30px;
     text-align: center;
     font-weight:bold;
+  
 `
 
 export const WrapperUploadFile = styled(Upload)`

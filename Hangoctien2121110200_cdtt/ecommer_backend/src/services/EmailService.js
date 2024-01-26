@@ -38,7 +38,7 @@ const sendEmailCreateOrder = async (email,orderItems) => {
 
     Chúng tôi cam kết sẽ không ngừng cải thiện và nâng cao chất lượng dịch vụ của mình để đảm bảo rằng quý khách hàng nhận được sự hài lòng tuyệt đối. Hãy yên tâm rằng chúng tôi sẽ làm hết sức mình để đảm bảo đơn hàng của quý khách hàng được xử lý một cách nhanh chóng và hiệu quả.
     
-    Nếu quý khách hàng có bất kỳ câu hỏi hoặc yêu cầu đặc biệt nào liên quan đến đơn hàng, xin vui lòng liên hệ với chúng tôi hoặc qua email tại [phuocgfs@gmail.com]. Chúng tôi luôn sẵn sàng hỗ trợ quý khách hàng.
+    Nếu quý khách hàng có bất kỳ câu hỏi hoặc yêu cầu đặc biệt nào liên quan đến đơn hàng, xin vui lòng liên hệ với chúng tôi hoặc qua email tại [ngoctiendz2k3@gmail.com]. Chúng tôi luôn sẵn sàng hỗ trợ quý khách hàng.
     
     Một lần nữa, chúng tôi xin gửi lời cảm ơn chân thành và hy vọng sẽ có cơ hội phục vụ quý khách hàng thêm nhiều lần nữa trong tương lai.</b></div> ${listItem}`,
     attachments: attachImage,

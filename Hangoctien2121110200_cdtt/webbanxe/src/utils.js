@@ -27,6 +27,8 @@ export const getBase64 = (file) =>
             type,
         };
     }
+
+
     export const renderOptions = (arr) => {
         let results = []
         if(arr) {
@@ -54,8 +56,8 @@ export const getBase64 = (file) =>
             })
         }
         results.push({
-            label: 'Thêm type',
-            value: 'add_type'
+            label: 'Thêm Brand',
+            value: 'add_brand'
         })
         return results
     }

@@ -2,7 +2,7 @@ const Contact = require("../models/ContactModel")
 
 const createContact = (newContact) => {
     return new Promise(async (resolve, reject) => {
-        const {title,content,email,phone,name,detail } = newContact
+        const {title,email,phone,name,detail } = newContact
         try {
             const checkContact = await Contact.findOne({
                 title: title
@@ -14,9 +14,11 @@ const createContact = (newContact) => {
                 })
             }
             const newContact = await Contact.create({
-                title, 
-                content,
-                email,phone,name,detail
+                name,
+      email,
+      phone,
+      title,
+      detail,
             })
             if (newContact) {
                 resolve({

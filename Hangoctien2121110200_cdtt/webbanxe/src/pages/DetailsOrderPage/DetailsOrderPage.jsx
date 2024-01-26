@@ -97,7 +97,7 @@ const DetailsOrderPage = () => {
                 
                 
               </WrapperProduct>
-            )
+            ) 
           })}
           
           <WrapperAllPrice>

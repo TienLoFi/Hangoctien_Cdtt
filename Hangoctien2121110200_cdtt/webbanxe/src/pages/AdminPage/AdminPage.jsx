@@ -7,7 +7,7 @@ import { UserOutlined, AppstoreOutlined, ShoppingCartOutlined ,MailOutlined,Star
 import HeaderComponent from '../../components/HeaderComponent/HeaderComponent';
 import AdminUser from '../../components/Backend/AdminUser/AdminUser';
 import AdminProduct from '../../components/Backend/AdminProduct/AdminProduct';
-// import OrderAdmin from '../../components/Backend/OrderAdmin/OrderAdmin';
+import OrderAdmin from '../../components/Backend/OrderAdmin/OrderAdmin';
 import AdminBrand from '../../components/Backend/AdminBrand/AdminBrand';
 import AdminMenu from '../../components/Backend/AdminMenu/AdminMenu';
 import AdminSlider from '../../components/Backend/AdminSlider/AdminSlider';
@@ -17,7 +17,7 @@ import AdminTopic from '../../components/Backend/AdminTopic/AdminTopic';
 import AdminContact from '../../components/Backend/AdminContact/AdminContact';
 
 //service
-// import * as OrderService from '../../services/OrderService'
+import * as OrderService from '../../services/OrderService'
 import * as ProductService from '../../services/ProductService'
 import * as UserService from '../../services/UserService'
 import * as BrandService from '../../services/BrandService'
@@ -55,10 +55,10 @@ const AdminPage = () => {
 
 
   const [keySelected, setKeySelected] = useState('');
-  // const getAllOrder = async () => {
-  //   const res = await OrderService.getAllOrder(user?.access_token)
-  //   return {data: res?.data, key: 'orders'}
-  // }
+  const getAllOrder = async () => {
+    const res = await OrderService.getAllOrder(user?.access_token)
+    return {data: res?.data, key: 'orders'}
+  }
 
   const getAllProducts = async () => {
     const res = await ProductService.getAllProduct()
@@ -117,7 +117,7 @@ const AdminPage = () => {
       {queryKey: ['brands'], queryFn: getAllBrands, staleTime: 1000 * 60},
       {queryKey: ['sliders'], queryFn: getAllSlider, staleTime: 1000 * 60},
       {queryKey: ['posts'], queryFn: getAllPost, staleTime: 1000 * 60}, 
-      // {queryKey: ['orders'], queryFn: getAllOrder, staleTime: 1000 * 60},
+      {queryKey: ['orders'], queryFn: getAllOrder, staleTime: 1000 * 60},
       {queryKey: ['menus'], queryFn: getAllMenu, staleTime: 1000 * 60},
       {queryKey: ['categories'], queryFn: getAllCategory, staleTime: 1000 * 60},
       {queryKey: ['topics'], queryFn: getAllTopic, staleTime: 1000 * 60},
@@ -137,11 +137,11 @@ const AdminPage = () => {
       return result
     }
   },[queries])
-  // const COLORS = {
+  const COLORS = {
   //  users: ['#e66465', '#9198e5'],
   //  products: ['#a8c0ff', '#3f2b96'],
-  // //  orders: ['#11998e', '#38ef7d'],
-  // };
+  //  orders: ['#11998e', '#38ef7d'],
+  };
 
   const renderPage = (key) => {
     switch (key) {
@@ -153,10 +153,10 @@ const AdminPage = () => {
         return (
           <AdminProduct />
         )
-        // case 'orders':
-        //   return (
-        //     <OrderAdmin />
-        //   )
+        case 'orders':
+          return (
+            <OrderAdmin />
+          )
         case 'brands':
           return (
             <AdminBrand />
@@ -202,8 +202,9 @@ const AdminPage = () => {
           mode="inline"
           style={{
             width: 256,
-            boxShadow: '1px 1px 2px #ccc',
-            height: '100vh'
+            boxShadow: '1px 1px 2px rgba(0, 0, 0, 0.2)  ',
+            height: '100%',
+            backgroundColor:'#fff'
           }}
           items={items}
           onClick={handleOnCLick}
