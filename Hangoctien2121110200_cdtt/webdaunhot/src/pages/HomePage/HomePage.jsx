@@ -51,8 +51,9 @@ const HomePage = () => {
   const [typeProducts, setTypeProducts] = useState([]);
   const [posts, setPosts] = useState([]);
   const [flashSaleEndTime, setFlashSaleEndTime] = useState(
-    new Date("2024-01-27T16:20:00").toISOString()
+    new Date("2024-01-27T10:29:00").toISOString()
   );
+  const [todayRecommendationsLimit, setTodayRecommendationsLimit] = useState(6);
   const [flashSaleProducts, setFlashSaleProducts] = useState([]);
 
   const fetchProductAll = async (context) => {
@@ -187,123 +188,120 @@ const HomePage = () => {
           </BodyContainer>
 
           <TypeContainer>
-      {isFlashSaleActive && (
-        <>
-          Flash sale <FlashSaleCountdown saleEndTime={flashSaleEndTime} />
-        </>
-      )}
-    </TypeContainer>
-    <WrapperProducts>
-  {flashSaleProducts
-    .filter(({ discount }) => discount !== null && discount !== 0) // Lọc sản phẩm có giảm giá
-    .slice(0, 6) // Giới hạn số lượng sản phẩm hiển thị
-    .map(
-      ({
-        _id,
-        countInStock,
-        description,
-        image,
-        name,
-        price,
-        rating,
-        type,
-        selled,
-        discount,
-      }) => (
-        <CardComponent
-          key={_id}
-          countInStock={countInStock}
-          description={description}
-          image={image}
-          name={name}
-          price={price}
-          rating={rating}
-          type={type}
-          selled={selled}
-          discount={discount}
-          id={_id}
-        />
-      )
-    )}
-</WrapperProducts>
+            {isFlashSaleActive && (
+              <>
+                Flash sale <FlashSaleCountdown saleEndTime={flashSaleEndTime} />
+              </>
+            )}
+          </TypeContainer>
+          <WrapperProducts>
+            {flashSaleProducts &&
+              flashSaleProducts
+                .filter(({ discount }) => discount !== null && discount !== 0)
+                .slice(0, 6)
+                .map(
+                  ({
+                    _id,
+                    countInStock,
+                    description,
+                    image,
+                    name,
+                    price,
+                    rating,
+                    type,
+                    selled,
+                    discount,
+                  }) => (
+                    <CardComponent
+                      key={_id}
+                      countInStock={countInStock}
+                      description={description}
+                      image={image}
+                      name={name}
+                      price={price}
+                      rating={rating}
+                      type={type}
+                      selled={selled}
+                      discount={discount}
+                      id={_id}
+                    />
+                  )
+                )}
+          </WrapperProducts>
 
-          <ProductContainer>
-    
-        
-          Sản Phẩm Mới
-      
-    
-    </ProductContainer>
-    <WrapperProducts>
-  {products?.data
-    ?.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt)) // Sắp xếp mảng theo thời gian thêm mới
-    .slice(0, 6) // Giới hạn số lượng sản phẩm hiển thị
-    .map(
-      ({
-        _id,
-        countInStock,
-        description,
-        image,
-        name,
-        imageDetail,
-        price,
-        rating,
-        type,
-        selled,
-        discount,
-      }) => (
-        <CardComponent
-          key={_id}
-          countInStock={countInStock}
-          description={description}
-          image={image}
-          name={name}
-          price={price}
-          rating={rating}
-          type={type}
-          selled={selled}
-          discount={discount}
-          id={_id}
-        />
-      )
-    )}
-</WrapperProducts>
+          <ProductContainer>Sản Phẩm Mới</ProductContainer>
+          <WrapperProducts>
+            {products?.data
+              ?.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt)) // Sắp xếp mảng theo thời gian thêm mới
+              .slice(0, 6) // Giới hạn số lượng sản phẩm hiển thị
+              .map(
+                ({
+                  _id,
+                  countInStock,
+                  description,
+                  image,
+                  name,
+                  imageDetail,
+                  price,
+                  rating,
+                  type,
+                  selled,
+                  discount,
+                }) => (
+                  <CardComponent
+                    key={_id}
+                    countInStock={countInStock}
+                    description={description}
+                    image={image}
+                    name={name}
+                    price={price}
+                    rating={rating}
+                    type={type}
+                    selled={selled}
+                    discount={discount}
+                    id={_id}
+                  />
+                )
+              )}
+          </WrapperProducts>
 
           <ProductContainer>Gợi Ý Hôm Nay</ProductContainer>
 
-          <WrapperProducts>
-  {products?.data
-    ?.sort(() => Math.random() - 0.5) // Sắp xếp mảng ngẫu nhiên
-    .map(
-      ({
-        _id,
-        countInStock,
-        description,
-        image,
-        name,
-        imageDetail,
-        price,
-        rating,
-        type,
-        selled,
-        discount,
-      }) => (
-        <CardComponent
-          key={_id}
-          countInStock={countInStock}
-          description={description}
-          image={image}
-          name={name}
-          price={price}
-          rating={rating}
-          type={type}
-          selled={selled}
-          discount={discount}
-          id={_id}
-        />
-      )
-    )}
-</WrapperProducts>
+      
+      <WrapperProducts>
+        {products?.data
+          ?.sort(() => Math.random() - 0.5)
+          .slice(0, todayRecommendationsLimit)
+              .map(
+                ({
+                  _id,
+                  countInStock,
+                  description,
+                  image,
+                  name,
+                  imageDetail,
+                  price,
+                  rating,
+                  type,
+                  selled,
+                  discount,
+                }) => (
+                  <CardComponent
+                    key={_id}
+                    countInStock={countInStock}
+                    description={description}
+                    image={image}
+                    name={name}
+                    price={price}
+                    rating={rating}
+                    type={type}
+                    selled={selled}
+                    discount={discount}
+                    id={_id}
+                  />
+                )
+              )}
+          </WrapperProducts>
 
           <div
             style={{
@@ -336,10 +334,10 @@ const HomePage = () => {
                 products?.totalPage === 1
               }
               styleTextButton={{
-                fontWeight: 500,  
+                fontWeight: 500,
                 color: products?.total === products?.data?.length && "#fff",
               }}
-              onClick={() => setLimit((prev) => prev + 6)}
+              onClick={() => setTodayRecommendationsLimit((prev) => prev + 6)}
             />
           </div>
         </div>

@@ -735,7 +735,7 @@ const AdminProduct = () => {
   )}
 
   <Form.Item
-    label="Số Lượng Nhập Kho"
+    label=" Nhập Kho"
     name="countInStock"
     rules={[
       { required: true, message: "Vui lòng nhập số lượng trong kho!" },

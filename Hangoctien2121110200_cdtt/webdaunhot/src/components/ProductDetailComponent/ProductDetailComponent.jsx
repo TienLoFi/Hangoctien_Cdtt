@@ -9,7 +9,7 @@ import {
   WrapperPriceProduct,
   WrapperPriceTextProduct,
   WrapperAddressProduct,
-  WrapperQualityProduct,
+  WrapperQualityProduct,    
   WrapperInputNumber,
   WrapperBtnQualityProduct,
   WrapperProducts,
@@ -122,7 +122,9 @@ const ProductDetailComponent = ({ idProduct }) => {
   const fetchProductAll = async (context) => {
     const limit = context?.queryKey && context?.queryKey[1];
     const search = context?.queryKey && context?.queryKey[2];
-    const res = await ProductService.getAllProduct(search, limit);
+    const type = productDetails?.type;
+   
+    const res = await ProductService.getAllProduct(search, limit,{type});
 
     return res;
   };

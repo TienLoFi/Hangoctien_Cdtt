@@ -39,21 +39,14 @@ export const routes =[
         page:TypeProductPage,
         isShowHeader: true
     },
+   
     {
         path: '/product/:brand',
         page:BrandProductPage,
         isShowHeader: true
     },
-    {
-        path: '/product/:type',
-        page:TypeProductPage,
-        isShowHeader: true
-    },
-    {
-        path: '/product/:brand',
-        page:BrandProductPage,
-        isShowHeader: true
-    },
+
+ 
     {
         path: '/product-details/:id',
         page:ProductDetailPage,

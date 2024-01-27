@@ -15,6 +15,7 @@ import AdminPost from '../../components/Backend/AdminPost/AdminPost';
 import AdminCategory from '../../components/Backend/AdminCategory/AdminCategory';
 import AdminTopic from '../../components/Backend/AdminTopic/AdminTopic';
 import AdminContact from '../../components/Backend/AdminContact/AdminContact';
+import AdminTrangDon from '../../components/Backend/AdminTrangDon/AdminTrangDon';
 
 //service
 import * as OrderService from '../../services/OrderService'
@@ -27,6 +28,7 @@ import * as MenuService from '../../services/MenuService'
 import * as CategoryService from '../../services/CategoryService'
 import * as TopicService from '../../services/TopicService'
 import * as ContactService from '../../services/ContactService'
+import * as TrangdonService from '../../services/TrangdonService'
 
 import CustomizedContent from './components/CustomizedContent';
 import { useSelector } from 'react-redux';
@@ -50,6 +52,7 @@ const AdminPage = () => {
     getItem('Quản Lí Menu', 'menus', <MailOutlined  />),
     getItem('Quản Lí Chủ Đề', 'topics', <MailOutlined  />),
     getItem('Quản Lí Liên Hệ', 'contacts', <MailOutlined  />),
+    getItem('Quản Lí Trang Đơn', 'trangdons', <MailOutlined  />),
   
   ];
 
@@ -70,10 +73,15 @@ const AdminPage = () => {
     console.log('res', res)
     return {data: res?.data, key: 'posts'}
   }
+  const getAllTrangdon = async () => {
+    const res = await TrangdonService.getAllTrangdon
+    console.log('res', res)
+    return {data: res?.data, key: 'trangdons'}
+  }
   const getAllMenu = async () => {
     const res = await MenuService.getAllMenu
     console.log('res', res)
-    return {data: res?.data, key: 'posts'}
+    return {data: res?.data, key: 'menus'}
   }
   const getAllUsers = async () => {
     const res = await UserService.getAllUser(user?.access_token)
@@ -122,6 +130,7 @@ const AdminPage = () => {
       {queryKey: ['categories'], queryFn: getAllCategory, staleTime: 1000 * 60},
       {queryKey: ['topics'], queryFn: getAllTopic, staleTime: 1000 * 60},
       {queryKey: ['contacts'], queryFn: getAllContact, staleTime: 1000 * 60},
+      {queryKey: ['trangdons'], queryFn: getAllTrangdon, staleTime: 1000 * 60},
     ]
   })
   const memoCount = useMemo(() => {
@@ -185,6 +194,10 @@ const AdminPage = () => {
                     return (
                       <AdminContact/>
                     )
+                    case 'trangdons':
+                      return (
+                        <AdminTrangDon/>
+                      )
       default:
         return <></>
     }
